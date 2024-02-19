@@ -1,0 +1,36 @@
+{
+    "id": "modbus",
+    "name": {
+        "en": "Modbus Device",
+        "de": "Modbus-Gerät"
+    },
+    "images": {
+        "large": "/drivers/modbus/assets/images/large.png",
+        "small": "/drivers/modbus/assets/images/small.png"
+    },
+    "class": "other",
+    "connectivity": [ "lan" ],
+    "capabilities": [
+    ],
+    "pair": [
+        {
+            "id": "device",
+            "navigation": {
+                "next": "list_devices"
+            }
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "prev": "device",
+                "next": "add_devices"
+            },
+            "options": { "singular": true }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

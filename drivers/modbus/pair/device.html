@@ -1,0 +1,38 @@
+<script type="application/javascript">
+
+    Homey.setTitle(Homey.__("pair.modbus.title"));
+
+    Homey.emit("getSettings").then(function (settings) {
+        if (settings){
+            document.getElementById('ip').value = settings.ip; 
+            document.getElementById('port').value = settings.port; 
+            document.getElementById('id').value = settings.id; 
+        }
+    });
+
+    function settingsChanged(){
+        let value = {
+            "ip": document.getElementById('ip').value,
+            "port": document.getElementById('port').value,
+            "id": document.getElementById('id').value,
+        };
+        Homey.emit("settingsChanged", value).then(function (result) {
+        });
+    }
+</script>
+
+<fieldset class="homey-form-fieldset">
+    <legend class="homey-form-legend"><span data-i18n="pair.db.device_settings"></span></legend>
+    <div class="homey-form-group">
+        <label for="ip" class="homey-form-label"><span data-i18n="pair.modbus.ip"></span></label>
+        <input id="ip" class="homey-form-input" type="text" value="" oninput="settingsChanged()"/>
+    </div>
+    <div class="homey-form-group">
+        <label for="port" class="homey-form-label"><span data-i18n="pair.modbus.port"></span></label>
+        <input id="port" class="homey-form-input" type="number" value="" oninput="settingsChanged()"/>
+    </div>
+    <div class="homey-form-group">
+        <label for="id" class="homey-form-label"><span data-i18n="pair.modbus.id"></span></label>
+        <input id="id" class="homey-form-input" type="number" value="" oninput="settingsChanged()"/>
+    </div>
+</fieldset>

@@ -1,0 +1,17 @@
+{
+    "pair": {
+        "modbus": {
+            "title": "Connect to Modbus device",
+            "device_settings": "Connection settings",
+            "ip": "IP address:",
+            "port": "Port:",
+            "id": "Modbus device ID",
+            "device_name": "Modbus device"
+        }
+    },
+    "device": {
+        "modbus": {
+            "device_info": "Use flow actions to interact with this device."
+        }
+    }
+}

@@ -1,0 +1,86 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Read register",
+        "de": "Lese Register"
+    },
+    "titleFormatted": {
+        "en": "Read register [[register]] with size [[size]] of type [[type]]",
+        "de": "Lese Register [[register]] mit Größe [[size]] vom Typ [[type]]"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=modbus"
+        },
+        {
+          "type": "number",
+          "name": "register",
+          "title": { 
+              "en": "Register",
+              "de": "Register"
+          }
+        },
+        {
+            "type": "number",
+            "name": "size",
+            "title": { 
+                "en": "Size",
+                "de": "Größe"
+            }
+        },
+        {
+            "type": "dropdown",
+            "name": "type",
+            "title": { 
+                "en": "Type",
+                "de": "Typ"
+            },
+            "values":[
+                {
+                    "id": "STRING",
+                    "title": "STRING"
+                },
+                {
+                    "id": "UINT16",
+                    "title": "UINT16"
+                },
+                {
+                    "id": "UINT32",
+                    "title": "UINT32"
+                },
+                {
+                    "id": "ACC32",
+                    "title": "ACC32"
+                },
+                {
+                    "id": "FLOAT",
+                    "title": "FLOAT"
+                },
+                {
+                    "id": "INT16",
+                    "title": "INT16"
+                },
+                {
+                    "id": "SCALE",
+                    "title": "SCALE"
+                },
+                {
+                    "id": "FLOAT32",
+                    "title": "FLOAT32"
+                }
+            ]
+        }
+    ],
+    "tokens":[
+        {
+            "name": "value",
+            "type": "string",
+            "title": { 
+                "en": "Value",
+                "de": "Wert" 
+            }
+        }
+    ]
+}

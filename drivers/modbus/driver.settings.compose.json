@@ -1,0 +1,29 @@
+[
+    {
+        "id": "ip",
+        "type": "text",
+        "label": { 
+            "en": "IP address",
+            "de": "IP-Adresse"
+        },
+        "value": ""
+    },
+    {
+        "id": "port",
+        "type": "number",
+        "label": { 
+            "en": "Port",
+            "de": "Port"
+        },
+        "value": 502
+    },
+    {
+        "id": "id",
+        "type": "number",
+        "label": { 
+            "en": "ID",
+            "de": "ID"
+        },
+        "value": 1
+    }
+]
