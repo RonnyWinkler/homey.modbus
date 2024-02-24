@@ -1,6 +1,6 @@
 {
   "id": "org.modbus",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "name": {
@@ -24,7 +24,7 @@
     "large": "/assets/images/large.png"
   },
   "source": "https://github.com/RonnyWinkler/homey.modbus",
-  "homeyCommunityTopicId": 0,
+  "homeyCommunityTopicId": 104497,
   "permissions": [],
   "contributing": {
       "donate": {

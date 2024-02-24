@@ -18,9 +18,9 @@ module.exports = class ModbusApp extends Homey.App {
           require('inspector').open(9229, '0.0.0.0', true);
         }
       }
-
-      await this._initFlowActions()
     }
+
+    await this._initFlowActions()
   }
 
   async _initFlowActions(){
