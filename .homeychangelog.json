@@ -1,14 +1,14 @@
 {
   "0.1.0": {
-    "en": "Initial release",
-    "de": "Initiales Release"
+    "en": "Initial release"
   },
   "0.1.1": {
-    "en": "Updated app image and forum link",
-    "de": "App-Bild und Forum-Link aktualisiert"
+    "en": "Updated app image and forum link"
   },
   "0.1.2": {
-    "en": "Fixed flow card registration",
-    "de": "Flowkarten-Registrierung korrigiert"
+    "en": "Fixed flow card registration"
+  },
+  "0.1.3": {
+    "en": "Show error writing registers in flow card error output"
   }
 }

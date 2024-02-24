@@ -142,17 +142,19 @@ module.exports = class ModbusDevice extends Homey.Device {
             if (error.response && error.response.body){
                 this.log("Error details: ", error.response.body);
             }
+            throw error;
         }
     }
 
     async flowActionWriteRegister(register, value){
         this.log("Write register: "+register+' value: '+value);
         try{
-            this._client.writeSingleRegister(register, value)
+            await this._client.writeSingleRegister(register, value)
             this.log("Write register: Succcess");
         }
         catch(error){
             this.log("Error writing register: ", error.message);
+            throw error;
         }
     }
 
