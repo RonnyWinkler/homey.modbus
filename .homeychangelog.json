@@ -10,5 +10,8 @@
   },
   "0.1.3": {
     "en": "Show error writing registers in flow card error output"
+  },
+  "0.1.4": {
+    "en": "Added datatypes to read register flow card"
   }
 }

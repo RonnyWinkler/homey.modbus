@@ -43,32 +43,44 @@
                     "title": "STRING"
                 },
                 {
+                    "id": "INT16",
+                    "title": "INT16"
+                },
+                {
+                    "id": "INT32",
+                    "title": "INT32"
+                },
+                {
+                    "id": "INT64",
+                    "title": "INT64"
+                },
+                {
                     "id": "UINT16",
                     "title": "UINT16"
                 },
                 {
                     "id": "UINT32",
-                    "title": "UINT32"
+                    "title": "UINT32 / ACC32"
                 },
                 {
-                    "id": "ACC32",
-                    "title": "ACC32"
+                    "id": "UINT64",
+                    "title": "UINT64"
                 },
                 {
                     "id": "FLOAT",
                     "title": "FLOAT"
                 },
                 {
-                    "id": "INT16",
-                    "title": "INT16"
+                    "id": "FLOAT32",
+                    "title": "FLOAT32"
+                },
+                {
+                    "id": "FLOAT64",
+                    "title": "FLOAT64"
                 },
                 {
                     "id": "SCALE",
-                    "title": "SCALE"
-                },
-                {
-                    "id": "FLOAT32",
-                    "title": "FLOAT32"
+                    "title": "SCALE / SUNSSF, 10^x Factor based on sunssf value"
                 }
             ]
         }

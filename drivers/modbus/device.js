@@ -105,30 +105,38 @@ module.exports = class ModbusDevice extends Homey.Device {
             let res = await this._client.readHoldingRegisters(register, size);
             let resultValue = '';
             switch (type) {
-                case 'UINT16':
-                    resultValue = res.response.body.valuesAsBuffer.readInt16BE().toString();
-                    break;
-                case 'UINT32':
-                    resultValue = res.response.body.valuesAsArray[0].toString();
-                    // console.log( response.body);
-                    break;
-                case 'ACC32':
-                    resultValue = res.response.body.valuesAsBuffer.readUInt32BE().toString();
-                    break;
-                case 'FLOAT':
-                    resultValue = res.response.body.valuesAsBuffer.readFloatBE().toString();
-                    break;
                 case 'STRING':
                     resultValue = res.response.body.valuesAsBuffer.toString();
                     break;
                 case 'INT16':
                     resultValue = res.response.body.valuesAsBuffer.readInt16BE().toString();
                     break;
-                case 'SCALE':
+                case 'INT32':
+                    resultValue = res.response.body.valuesAsBuffer.readInt32BE().toString();
+                    break;
+                case 'INT64':
+                    resultValue = res.response.body.valuesAsBuffer.readBigInt64BE().toString();
+                    break;
+                case 'UINT16':
                     resultValue = res.response.body.valuesAsBuffer.readInt16BE().toString();
+                    break;
+                case 'UINT32 / ACC32':
+                    resultValue = res.response.body.valuesAsBuffer.readUInt32BE().toString();
+                    break;
+                case 'UINT64':
+                    resultValue = res.response.body.valuesAsBuffer.readBigUint64BE().toString();
+                    break;
+                case 'FLOAT':
+                    resultValue = res.response.body.valuesAsBuffer.readFloatBE().toString();
                     break;
                 case 'FLOAT32':
                     resultValue = res.response.body.valuesAsBuffer.swap16().swap32().readFloatBE().toString();
+                    break;
+                case 'FLOAT64':
+                    resultValue = res.response.body.valuesAsBuffer.swap16().swap32().swap64().readFloatBE().toString();
+                    break;
+                case 'SCALE':
+                    resultValue = Math.pow(10, res.response.body.valuesAsBuffer.readInt16BE());
                     break;
                 default:
                     break;
