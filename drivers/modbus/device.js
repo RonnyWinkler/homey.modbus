@@ -103,47 +103,58 @@ module.exports = class ModbusDevice extends Homey.Device {
         this.log("Read register: "+register);
         try{
             let res = await this._client.readHoldingRegisters(register, size);
-            let resultValue = '';
+            let valueNumeric = 0;
+            let valueString;
             switch (type) {
                 case 'STRING':
-                    resultValue = res.response.body.valuesAsBuffer.toString();
+                    valueString = res.response.body.valuesAsBuffer.toString();
                     break;
                 case 'INT16':
-                    resultValue = res.response.body.valuesAsBuffer.readInt16BE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.readInt16BE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'INT32':
-                    resultValue = res.response.body.valuesAsBuffer.readInt32BE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.readInt32BE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'INT64':
-                    resultValue = res.response.body.valuesAsBuffer.readBigInt64BE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.readBigInt64BE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'UINT16':
-                    resultValue = res.response.body.valuesAsBuffer.readInt16BE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.readInt16BE();
+                    valueString = valueNumeric.toString();
                     break;
-                case 'UINT32 / ACC32':
-                    resultValue = res.response.body.valuesAsBuffer.readUInt32BE().toString();
+                case 'UINT32':
+                    valueNumeric = res.response.body.valuesAsBuffer.readUInt32BE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'UINT64':
-                    resultValue = res.response.body.valuesAsBuffer.readBigUint64BE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.readBigUint64BE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'FLOAT':
-                    resultValue = res.response.body.valuesAsBuffer.readFloatBE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'FLOAT32':
-                    resultValue = res.response.body.valuesAsBuffer.swap16().swap32().readFloatBE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.swap16().swap32().readFloatBE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'FLOAT64':
-                    resultValue = res.response.body.valuesAsBuffer.swap16().swap32().swap64().readFloatBE().toString();
+                    valueNumeric = res.response.body.valuesAsBuffer.swap16().swap32().swap64().readFloatBE();
+                    valueString = valueNumeric.toString();
                     break;
                 case 'SCALE':
-                    resultValue = Math.pow(10, res.response.body.valuesAsBuffer.readInt16BE());
+                    valueNumeric = Math.pow(10, res.response.body.valuesAsBuffer.readInt16BE());
+                    valueString = valueNumeric.toString();
                     break;
                 default:
                     break;
             }
 
-            this.log("Response: ", resultValue);
-            return resultValue;
+            this.log("Response: String: ", valueString, ", Number: ", valueNumeric);
+            return {valueString, valueNumeric};
         }
         catch(error){
             this.log("Error reading register: ", error.message);

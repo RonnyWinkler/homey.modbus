@@ -90,8 +90,16 @@
             "name": "value",
             "type": "string",
             "title": { 
-                "en": "Value",
-                "de": "Wert" 
+                "en": "String value",
+                "de": "String-Wert" 
+            }
+        },
+        {
+            "name": "value_numeric",
+            "type": "number",
+            "title": { 
+                "en": "Numeric value",
+                "de": "Numerischer Wert" 
             }
         }
     ]

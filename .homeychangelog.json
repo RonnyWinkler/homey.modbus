@@ -13,5 +13,8 @@
   },
   "0.1.4": {
     "en": "Added datatypes to read register flow card"
+  },
+  "0.1.5": {
+    "en": "Added numeric result token to read register flow card"
   }
 }

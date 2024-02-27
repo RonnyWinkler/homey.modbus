@@ -26,9 +26,10 @@ module.exports = class ModbusApp extends Homey.App {
   async _initFlowActions(){
     this.homey.flow.getActionCard('read_register')
     .registerRunListener(async (args, state) => {
-        let result = await args.device.flowActionReadRegister(args.register, args.size, args.type);
+        let {valueString, valueNumeric} = await args.device.flowActionReadRegister(args.register, args.size, args.type);
         return {
-          "value": result
+          "value": valueString,
+          "value_numeric": valueNumeric
         }
     });
 
