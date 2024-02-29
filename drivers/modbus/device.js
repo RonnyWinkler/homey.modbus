@@ -157,11 +157,14 @@ module.exports = class ModbusDevice extends Homey.Device {
             return {valueString, valueNumeric};
         }
         catch(error){
+            let message = '';
             this.log("Error reading register: ", error.message);
+            message = error.message;
             if (error.response && error.response.body){
                 this.log("Error details: ", error.response.body);
+                message = message + ' [' + error.response.body + ']';
             }
-            throw error;
+            throw new Error(message);
         }
     }
 
