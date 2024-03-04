@@ -25,5 +25,37 @@
             "de": "ID"
         },
         "value": 1
+    },
+    {
+        "id": "connection",
+        "type": "dropdown",
+        "label": { 
+            "en": "Connection type",
+            "de": "Verbindunsgtyp"
+        },
+        "value": "keep",
+        "values":[
+            {
+                "id": "keep",
+                "label":{ 
+                    "en": "Keep connection",
+                    "de": "Verbindung aufrecht erhalten"
+                }
+            },
+            {
+                "id": "single",
+                "label":{ 
+                    "en": "Single connect",
+                    "de": "Einzelverbindung"
+                }
+            },
+            {
+                "id": "manually",
+                "label":{ 
+                    "en": "Manually",
+                    "de": "Manuell"
+                }
+            }
+        ]
     }
 ]

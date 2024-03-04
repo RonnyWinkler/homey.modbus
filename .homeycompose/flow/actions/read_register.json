@@ -5,8 +5,12 @@
         "de": "Lese Register"
     },
     "titleFormatted": {
-        "en": "Read register [[register]] with size [[size]] of type [[type]]",
-        "de": "Lese Register [[register]] mit Größe [[size]] vom Typ [[type]]"
+        "en": "Read register [[register]] with size [[size]] of type [[type]] with addressing [[addressing]]",
+        "de": "Lese Register [[register]] mit Größe [[size]] vom Typ [[type]] mit Adressierung [[addressing]]"
+    },
+    "hint": {
+        "en": "Reads a Modbus register from a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
+        "de": "Liest ein Modbus-Register von einem Modbus-Gerät. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
     },
     "args": [
         {
@@ -81,6 +85,36 @@
                 {
                     "id": "SCALE",
                     "title": "SCALE / SUNSSF, 10^x Factor based on sunssf value"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "name": "addressing",
+            "required": false,
+            "title": { 
+                "en": "Addressing",
+                "de": "Adressierung"
+            },
+            "hint":{
+                "en": "If not specified, the register value is taken without modification (addressing #0)",
+                "de": "Wenn nicht angegeben, wird der Register-Wert ohne Änderung übernommen (Adressierung #0)"
+            },
+            "value": "0",
+            "values":[
+                {
+                    "id": "0",
+                    "title": {
+                        "en": "Address, starting with #0",
+                        "de": "Adresse, beginnend mit #0"
+                    }
+                },
+                {
+                    "id": "1",
+                    "title": {
+                        "en": "Register, starting with #1",
+                        "de": "Register, beginnend mit #1"
+                    }
                 }
             ]
         }

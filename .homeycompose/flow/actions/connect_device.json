@@ -1,0 +1,22 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Connect device",
+        "de": "Verbinde Gerät"
+    },
+    "titleFormatted": {
+        "en": "Connect device",
+        "de": "Verbinde Gerät"
+    },
+    "hint": {
+        "en": "Connect a device if needed. The connection can be disconnected by a flow action.",
+        "de": "Verbinde ein Gerät bei Bedarf. Die Verbindung kann per Flow-Aktion wieder getrennt werden."
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=modbus"
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Disconnect device",
+        "de": "Trenne Gerät"
+    },
+    "titleFormatted": {
+        "en": "Disconnect device",
+        "de": "Trenne Gerät"
+    },
+    "hint": {
+        "en": "Disconnect a device if needed.",
+        "de": "Trenne ein Gerät bei Bedarf."
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=modbus"
+        }
+    ]
+}
