@@ -22,5 +22,8 @@
   },
   "0.2.0": {
     "en": "Added connection type to device settings. Added addressing option to flow cards. Fxed UINT16 Reading"
+  },
+  "0.3.0": {
+    "en": "Added Slave Device"
   }
 }

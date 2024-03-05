@@ -1,0 +1,11 @@
+[
+    {
+        "id": "id",
+        "type": "number",
+        "label": { 
+            "en": "ID",
+            "de": "ID"
+        },
+        "value": 1
+    }
+]

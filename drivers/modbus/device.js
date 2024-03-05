@@ -18,8 +18,6 @@ module.exports = class ModbusDevice extends Homey.Device {
         logLevel: 'error',
         logEnabled: true,
         };
-    _socket = new net.Socket();
-    _client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
 
     async onInit() {
         this.log('Device init: '+this.getName()+' ID: '+this.getData().id);
@@ -27,7 +25,12 @@ module.exports = class ModbusDevice extends Homey.Device {
         this.setWarning(this.homey.__("device.modbus.device_info"));
 
         this._settings = this.getSettings();
+
+        this._socketConnected = false;
+        this._socket = new net.Socket();
+        this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
         this._socket.setKeepAlive(true);
+        this._socket.setMaxListeners(99);
         //socket.setTimeout(15000);
         this._socket.on('end', () => {});
         this._socket.on('connect', () => {
@@ -67,12 +70,29 @@ module.exports = class ModbusDevice extends Homey.Device {
             return;
         }
         return new Promise((resolve, reject) => {
-            this.log('Device connect: '+this.getName()+' to IP '+this._modbusOptions.ip+' port '+this._modbusOptions.port);
+            this.log('Device connect: '+this.getName()+' to IP '+this._modbusOptions.host+' port '+this._modbusOptions.port);
             this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
-            this._socket.connect(this._modbusOptions, (()=>{ 
+
+            const errorHandler = (error) => {
+                this._socket.removeListener("connect", connectHandler);
+                reject(error);
+            }
+
+            const connectHandler = () => {
                 this.log('Connected successfully.');
-                resolve(true); 
-            }));
+                this._socketConnected = true;
+                this._socket.removeListener("error", errorHandler)
+                resolve();
+              }
+
+            if (this._socketConnected == false){
+                this._socket.once("error", errorHandler);
+                this._socket.connect(this._modbusOptions,connectHandler);
+            }
+            else{
+                this.log("Already connected.");
+                resolve();
+            }
         });
     }
 
@@ -82,11 +102,32 @@ module.exports = class ModbusDevice extends Homey.Device {
         }
         return new Promise((resolve, reject) => {
             this.log('Device disconnected: '+this.getName());
-            this._socket.end((()=>{ 
+
+            const errorHandler = (error) => {
+                this._socket.removeListener("close", disconnectHandler);
+                reject(error);
+            }
+
+            const disconnectHandler = () => {
                 this.log('Disconnected successfully.');
-                resolve(true); 
-            }));
+                this._socketConnected = false;
+                this._socket.removeListener("error", errorHandler)
+                resolve();
+            }
+
+            if (this._socketConnected == true){
+                this._socket.once("error", errorHandler);
+                this._socket.end(disconnectHandler);
+            }
+            else{
+                this.log("Not connected.");
+                resolve();
+            }
         });
+    }
+
+    getSocket(){
+        return this._socket;
     }
 
     /**
@@ -107,19 +148,22 @@ module.exports = class ModbusDevice extends Homey.Device {
                 this._settings = newSettings;
                 if (newSettings.connection === 'keep') {
                     this.log("KeepAlive option set. Reconnecting...");
-                    await this.disconnectDevice();
-                    // await this.delay(1000); // Add a delay to ensure the socket is closed before reconnecting
+                    try{
+                        await this.disconnectDevice();
+                    }
+                    catch(error){
+                        this.log("Error disconnecting: ", error.message);
+                    }
                     this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
-                    await this.connectDevice(this._modbusOptions);
-                    // Additional logic if needed after reconnecting
+                    await this.connectDevice();
                     this.log('Reconnected successfully.');
                 }
                 else{
                     this.log("KeepAlive option not set. Don't reconnect.");
                 }
             } catch (error) {
-                // Explicitly type error as an Error
                 this.log('Error reconnecting: ', error.message);
+                throw error;
             }
         }
     }
@@ -143,14 +187,16 @@ module.exports = class ModbusDevice extends Homey.Device {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     
-    // FLOW ACTIONS ==============================================================================
-    async flowActionReadAddress(address, size, type='STRING'){
-        this.log("Read register: "+address);
+
+
+    // REGISTER Handling ==============================================================================
+    async readAddress(client = this._client, address, size, type='STRING'){
         try{
             if (this._settings.connection === 'single') {
                 await this.connectDevice();
             }
-            let res = await this._client.readHoldingRegisters(address, size);
+            this.log("Read register: "+address);
+            let res = await client.readHoldingRegisters(address, size);
             let valueNumeric = 0;
             let valueString;
             switch (type) {
@@ -222,13 +268,13 @@ module.exports = class ModbusDevice extends Homey.Device {
         }
     }
 
-    async flowActionWriteAddress(address, value){
+    async writeAddress(client = this._client, address, value){
         this.log("Write register: "+address+' value: '+value);
         try{
             if (this._settings.connection === 'single') {
                 await this.connectDevice();
             }
-            await this._client.writeSingleRegister(address, value)
+            await client.writeSingleRegister(address, value)
             this.log("Write register: Succcess");
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
@@ -241,6 +287,16 @@ module.exports = class ModbusDevice extends Homey.Device {
             this.log("Error writing register: ", error.message);
             throw error;
         }
+    }
+
+        
+    // FLOW ACTIONS ==============================================================================
+    async flowActionReadAddress(address, size, type='STRING'){
+        return await this.readAddress(this._client, address, size, type='STRING');
+    }
+
+    async flowActionWriteAddress(address, value){
+        await this.writeAddress(this._client, address, value);
     }
 
     async flowActionConnectDevice(){

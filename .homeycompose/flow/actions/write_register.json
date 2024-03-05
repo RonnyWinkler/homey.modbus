@@ -16,7 +16,7 @@
         {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=modbus"
+            "filter": "driver_id=modbus|modbus_slave"
         },
         {
           "type": "text",

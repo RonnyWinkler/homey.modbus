@@ -1,0 +1,36 @@
+{
+    "id": "modbus_slave",
+    "name": {
+        "en": "Modbus Slave-Device",
+        "de": "Modbus Slave-Gerät"
+    },
+    "images": {
+        "large": "/drivers/modbus_slave/assets/images/large.png",
+        "small": "/drivers/modbus_slave/assets/images/small.png"
+    },
+    "class": "other",
+    "connectivity": [ "lan" ],
+    "capabilities": [
+    ],
+    "pair": [
+        {
+            "id": "device",
+            "navigation": {
+                "next": "list_devices"
+            }
+        },
+        {
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "prev": "device",
+                "next": "add_devices"
+            },
+            "options": { "singular": true }
+        },
+        {
+            "id": "add_devices",
+            "template": "add_devices"
+        }
+    ]
+}

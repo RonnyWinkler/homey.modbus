@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "org.modbus",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "name": {
@@ -100,7 +100,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=modbus"
+            "filter": "driver_id=modbus|modbus_slave"
           },
           {
             "type": "number",
@@ -241,7 +241,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=modbus"
+            "filter": "driver_id=modbus|modbus_slave"
           },
           {
             "type": "text",
@@ -392,6 +392,56 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "modbus_slave",
+      "name": {
+        "en": "Modbus Slave-Device",
+        "de": "Modbus Slave-Gerät"
+      },
+      "images": {
+        "large": "/drivers/modbus_slave/assets/images/large.png",
+        "small": "/drivers/modbus_slave/assets/images/small.png"
+      },
+      "class": "other",
+      "connectivity": [
+        "lan"
+      ],
+      "capabilities": [],
+      "pair": [
+        {
+          "id": "device",
+          "navigation": {
+            "next": "list_devices"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "prev": "device",
+            "next": "add_devices"
+          },
+          "options": {
+            "singular": true
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "settings": [
+        {
+          "id": "id",
+          "type": "number",
+          "label": {
+            "en": "ID",
+            "de": "ID"
+          },
+          "value": 1
         }
       ]
     }
