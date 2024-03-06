@@ -9,7 +9,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         this.log('Device init: '+this.getName()+' ID: '+this.getData().id);
         this.setWarning(this.homey.__("device.modbus.device_info"));
         this._settings = this.getSettings();
-        // this._client = new Modbus.client.TCP(this._parent.getSocket(), this._settings.unitId);
+        this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
     }
 
     /**
@@ -21,12 +21,34 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     * @returns {Promise<string|void>} return a custom message that will be displayed
     */
     async onSettings({ newSettings, changedKeys }) {
-        if (newSettings && (newSettings.ip || newSettings.port)) {
+        if (newSettings && newSettings.id) {
             try {
                 this.log("IP address or port changed. Reconnecting...");
                 this._settings = newSettings;
                 this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
+
+                try{
+                    await this.getParent().disconnectDevice();
+                }
+                catch(error){
+                    this.log("Error disconnecting: ", error.message);
+                }
+
+                // try{
+                //     if (this.getParent().getSetting('connection') === 'keep') {
+                //         await this.getParent().connectDevice();
+                //         this.log('Reconnected successfully.');
+                //     }
+                //     else{
+                //         this.log("KeepAlive option not set. Don't reconnect.");
+                //     }
+                // }
+                // catch(error){
+                //     this.log("Error disconnecting: ", error.message);
+                // }
             } catch (error) {
+                this.log("Error creating new client: ", error.message);
+                throw error;
             }
         }
     }
@@ -66,19 +88,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     }
 
     getClient(){
-        try{
-            if (this._client == undefined){
-                this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
-                return this._client;
-            }
-            else{
-                return this._client;
-            }
-        }
-        catch(error){
-            this.log("Error creating client: ", error.message);
-            throw error;
-        }
+        return this._client;
     }
 
     // REGISTER Handling ==============================================================================
@@ -87,8 +97,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     }
 
     async writeAddress(address, value){
-        await this.checkClient();
-        await this._parent.writeAddress(client, address, value);
+        await this._parent.writeAddress(this.getClient(), address, value);
     }
 
         

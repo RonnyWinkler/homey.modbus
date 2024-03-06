@@ -25,5 +25,8 @@
   },
   "0.3.0": {
     "en": "Added Slave Device"
+  },
+  "0.3.1": {
+    "en": "Improved Deviced connection"
   }
 }
