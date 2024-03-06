@@ -5,7 +5,8 @@ const net = require('net');
 const Modbus = require('jsmodbus');	
 
 const RETRY_INTERVAL = 60 * 1000; 
-
+const REGISTER_HOLDING = 'HOLDING';
+const REGISTER_INPUT = 'INPUT';
 
 module.exports = class ModbusDevice extends Homey.Device {
 	_modbusOptions = {
@@ -197,13 +198,23 @@ module.exports = class ModbusDevice extends Homey.Device {
 
 
     // REGISTER Handling ==============================================================================
-    async readAddress(client = this._client, address, size, type='STRING'){
+    async readAddress(client = this._client, address, size, type='STRING', registerType=REGISTER_HOLDING){
         try{
             if (this._settings.connection === 'single') {
                 await this.connectDevice();
             }
             this.log("Read register: "+address);
-            let res = await client.readHoldingRegisters(address, size);
+            let res;
+            if (registerType == REGISTER_HOLDING){
+                res = await client.readHoldingRegisters(address, size);
+            }
+            else if (registerType == REGISTER_INPUT){
+                res = await client.readInputRegisters(address, size);
+            }
+            else
+            {
+                throw new Error("Invalid register type: "+registerType);
+            }
             let valueNumeric = 0;
             let valueString;
             switch (type) {
@@ -268,8 +279,14 @@ module.exports = class ModbusDevice extends Homey.Device {
             this.log("Error reading register: ", error.message);
             message = error.message;
             if (error.response && error.response.body){
-                this.log("Error details: ", error.response.body);
-                message = message + ' [' + error.response.body + ']';
+                if (error.response.body.message){
+                    this.log("Error details: ", error.response.body.message);
+                    message = message + ' [' + error.response.body.message + ']';
+                }
+                else{
+                    this.log("Error details: ", error.response.body);
+                    message = message + ' [' + error.response.body + ']';
+                }
             }
             throw new Error(message);
         }
@@ -299,7 +316,11 @@ module.exports = class ModbusDevice extends Homey.Device {
         
     // FLOW ACTIONS ==============================================================================
     async flowActionReadAddress(address, size, type='STRING'){
-        return await this.readAddress(this._client, address, size, type);
+        return await this.readAddress(this._client, address, size, type, REGISTER_HOLDING);
+    }
+
+    async flowActionReadAddressInput(address, size, type='STRING'){
+        return await this.readAddress(this._client, address, size, type, REGISTER_INPUT);
     }
 
     async flowActionWriteAddress(address, value){

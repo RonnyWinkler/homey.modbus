@@ -31,5 +31,8 @@
   },
   "0.3.2": {
     "en": "Improved Deviced connection"
+  },
+  "0.3.3": {
+    "en": "Improved Deviced connection. Fixed Slave data type. Added reading InputRegisters"
   }
 }

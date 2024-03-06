@@ -1,16 +1,16 @@
 {
     "highlight": true,
     "title": {
-        "en": "Write register",
-        "de": "Schreibe Register"
+        "en": "Write Holding Register",
+        "de": "Schreibe Holding Register"
     },
     "titleFormatted": {
-        "en": "Write register [[register]] with value [[value]] with addressing [[addressing]]",
-        "de": "Schreibe Register [[register]] mit Wert [[value]] mit Adressierung [[addressing]]"
+        "en": "Write Holding Register [[register]] with value [[value]] with addressing [[addressing]]",
+        "de": "Schreibe Holding Register [[register]] mit Wert [[value]] mit Adressierung [[addressing]]"
     },
     "hint": {
         "en": "Reads a Modbus register from a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
-        "de": "Liest ein Modbus-Register von einem Modbus-Gerät. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
+        "de": "Liest ein Modbus Register von einem Modbus-Gerät. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
     },
     "args": [
         {

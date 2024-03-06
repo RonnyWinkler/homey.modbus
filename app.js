@@ -25,6 +25,16 @@ module.exports = class ModbusApp extends Homey.App {
 
   async _initFlowActions(){
 
+    this.homey.flow.getActionCard('connect_device')
+    .registerRunListener(async (args, state) => {
+        await args.device.flowActionConnectDevice();
+    });
+
+    this.homey.flow.getActionCard('disconnect_device')
+    .registerRunListener(async (args, state) => {
+        await args.device.flowActionDisconnectDevice();
+    });
+
     this.homey.flow.getActionCard('read_register')
     .registerRunListener(async (args, state) => {
         let register =  args.register;
@@ -38,6 +48,19 @@ module.exports = class ModbusApp extends Homey.App {
         }
     });
 
+    this.homey.flow.getActionCard('read_register_input')
+    .registerRunListener(async (args, state) => {
+        let register =  args.register;
+        if (args.addressing == "1"){
+          register = args.register - 1;
+        }  
+        let {valueString, valueNumeric} = await args.device.flowActionReadAddressInput( register, args.size, args.type);
+        return {
+          "value": valueString,
+          "value_numeric": valueNumeric
+        }
+    });
+
     this.homey.flow.getActionCard('write_register')
     .registerRunListener(async (args, state) => {
       let register =  args.register;
@@ -45,16 +68,6 @@ module.exports = class ModbusApp extends Homey.App {
         register = args.register - 1;
       }  
       await args.device.flowActionWriteAddress( register, args.value);
-    });
-
-    this.homey.flow.getActionCard('connect_device')
-    .registerRunListener(async (args, state) => {
-        await args.device.flowActionConnectDevice();
-    });
-
-    this.homey.flow.getActionCard('disconnect_device')
-    .registerRunListener(async (args, state) => {
-        await args.device.flowActionDisconnectDevice();
     });
 
   }

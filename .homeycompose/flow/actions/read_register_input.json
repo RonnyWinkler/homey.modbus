@@ -1,12 +1,12 @@
 {
     "highlight": true,
     "title": {
-        "en": "Read Holding Register",
-        "de": "Lese Holding Register"
+        "en": "Read Input Register",
+        "de": "Lese Input Register"
     },
     "titleFormatted": {
-        "en": "Read Holding Register [[register]] with size [[size]] of type [[type]] with addressing [[addressing]]",
-        "de": "Lese Holding Register [[register]] mit Größe [[size]] vom Typ [[type]] mit Adressierung [[addressing]]"
+        "en": "Read Input Register [[register]] with size [[size]] of type [[type]] with addressing [[addressing]]",
+        "de": "Lese Input Register [[register]] mit Größe [[size]] vom Typ [[type]] mit Adressierung [[addressing]]"
     },
     "hint": {
         "en": "Reads a Modbus register from a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",

@@ -103,7 +103,11 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         
     // FLOW ACTIONS ==============================================================================
     async flowActionReadAddress(address, size, type='STRING'){
-        return await this.readAddress(address, size, type='STRING');
+        return await this.readAddress(address, size, type, 'HOLDING');
+    }
+
+    async flowActionReadAddressInput(address, size, type='STRING'){
+        return await this.readAddress(address, size, type, 'INPUT');
     }
 
     async flowActionWriteAddress(address, value){
