@@ -39,7 +39,7 @@ module.exports = class ModbusDevice extends Homey.Device {
         this._socket.on('timeout', () => {
             this._socket.end();
             if (this._settings.connection === 'keep') {
-                this.connectDevice();
+                this.connectDevice().catch((error) => { this.log("Error reconnecting on socket.on('timeout'): ", error.message); });
                 // this._socket.connect(this._modbusOptions);
             }
         });
@@ -49,7 +49,7 @@ module.exports = class ModbusDevice extends Homey.Device {
         this._socket.on('close', (error) => {
             if (this._settings.connection === 'keep') {
                 // this._socket.connect(this._modbusOptions);
-                this.connectDevice();
+                this.connectDevice().catch((error) => { this.log("Error reconnecting on socket.on('close'): ", error.message); });
             }
         });
         // this._socket.on('data', () => {
