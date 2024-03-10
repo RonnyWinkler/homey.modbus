@@ -28,24 +28,12 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
                 this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
 
                 try{
-                    await this.getParent().disconnectDevice();
+                    await this.getParent().reconnectDevice();
                 }
                 catch(error){
-                    this.log("Error disconnecting: ", error.message);
+                    this.log("Error reconnecting: ", error.message);
                 }
 
-                // try{
-                //     if (this.getParent().getSetting('connection') === 'keep') {
-                //         await this.getParent().connectDevice();
-                //         this.log('Reconnected successfully.');
-                //     }
-                //     else{
-                //         this.log("KeepAlive option not set. Don't reconnect.");
-                //     }
-                // }
-                // catch(error){
-                //     this.log("Error disconnecting: ", error.message);
-                // }
             } catch (error) {
                 this.log("Error creating new client: ", error.message);
                 throw error;
@@ -53,9 +41,14 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         }
     }
 
-    onAdded() {
+    async onAdded() {
         this.log('device added: ', this.getData().id);
-
+        try{
+            await this.getParent().reconnectDevice();
+        }
+        catch(error){
+            this.log("Error reconnecting: ", error.message);
+        }
     }
 
     onDeleted() {

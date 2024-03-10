@@ -29,27 +29,32 @@ module.exports = class ModbusDevice extends Homey.Device {
 
         this._socketConnected = false;
         this._socket = new net.Socket();
+        // await this.disconnectDevice();
+
         this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
         this._socket.setKeepAlive(true);
         this._socket.setMaxListeners(99);
         //socket.setTimeout(15000);
-        this._socket.on('end', () => {});
+        this._socket.on('end', () => {
+            this.log("Socket ended.");
+        });
         this._socket.on('connect', () => {
             this.log("Socket connected.");
         });
         this._socket.on('timeout', () => {
+            this.log("Socket timeout.");
             this._socket.end();
             if (this._settings.connection === 'keep') {
                 this.connectDevice().catch((error) => { this.log("Error reconnecting on socket.on('timeout'): ", error.message); });
-                // this._socket.connect(this._modbusOptions);
             }
         });
         this._socket.on('error', (error) => {
-            this.log("Error connecting to socket: ", error.message);
+            this.log("Socket error: ", error.message);
         });
         this._socket.on('close', (error) => {
+            this.log("Socket closed.");
+            this._socketConnected = false;
             if (this._settings.connection === 'keep') {
-                // this._socket.connect(this._modbusOptions);
                 this.connectDevice().catch((error) => { this.log("Error reconnecting on socket.on('close'): ", error.message); });
             }
         });
@@ -75,7 +80,7 @@ module.exports = class ModbusDevice extends Homey.Device {
         }
         return new Promise((resolve, reject) => {
             this.log('Device connect: '+this.getName()+' to IP '+this._modbusOptions.host+' port '+this._modbusOptions.port+' ID '+this._modbusOptions.unitId);
-            this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
+            // this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
 
             const errorHandler = (error) => {
                 this._socket.removeListener("connect", connectHandler);
@@ -90,6 +95,7 @@ module.exports = class ModbusDevice extends Homey.Device {
               }
 
             if (this._socketConnected == false){
+            // if (this._socket.readyState == 'closed'){
                 this._socket.once("error", errorHandler);
                 this._socket.connect(this._modbusOptions,connectHandler);
             }
@@ -120,6 +126,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             }
 
             if (this._socketConnected == true){
+            //   if (this._socket.readyState != 'closed'){
                 this._socket.once("error", errorHandler);
                 this._socket.end(disconnectHandler);
             }
@@ -128,6 +135,22 @@ module.exports = class ModbusDevice extends Homey.Device {
                 resolve();
             }
         });
+    }
+
+    async reconnectDevice(){
+        this.log('Device reconnected: '+this.getName());
+        try{
+            await this.disconnectDevice();
+        }
+        catch(error){}
+
+        if (this._settings.connection === 'keep' && this._socket) {
+            this.log("KeepAlive option set. Reconnecting...");
+            await this.connectDevice();
+        }
+        else{
+            this.log("KeepAlive option not set. Don't reconnect.");
+        }
     }
 
     getSocket(){
