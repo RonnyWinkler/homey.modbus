@@ -85,26 +85,26 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     }
 
     // REGISTER Handling ==============================================================================
-    async readAddress(address, size, type='STRING'){
+    async readAddress(address, size, type){
         return await this.getParent().readAddress(this.getClient(), address, size, type);
     }
 
-    async writeAddress(address, value){
-        await this._parent.writeAddress(this.getClient(), address, value);
+    async writeAddress(address, value, type){
+        await this._parent.writeAddress(this.getClient(), address, value, type);
     }
 
         
     // FLOW ACTIONS ==============================================================================
-    async flowActionReadAddress(address, size, type='STRING'){
+    async flowActionReadAddress(address, size, type){
         return await this.readAddress(address, size, type, 'HOLDING');
     }
 
-    async flowActionReadAddressInput(address, size, type='STRING'){
+    async flowActionReadAddressInput(address, size, type){
         return await this.readAddress(address, size, type, 'INPUT');
     }
 
-    async flowActionWriteAddress(address, value){
-        await this.writeAddress(address, value);
+    async flowActionWriteAddress(address, value, type){
+        await this.writeAddress(address, value, type);
     }
 
 }

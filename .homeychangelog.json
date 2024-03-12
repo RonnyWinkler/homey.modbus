@@ -37,5 +37,8 @@
   },
   "0.3.4": {
     "en": "Fixed device reconnect"
+  },
+  "0.4.1": {
+    "en": "Added data type to write register flow card"
   }
 }

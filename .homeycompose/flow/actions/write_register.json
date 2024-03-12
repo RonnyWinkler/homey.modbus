@@ -5,8 +5,8 @@
         "de": "Schreibe Holding Register"
     },
     "titleFormatted": {
-        "en": "Write Holding Register [[register]] with value [[value]] with addressing [[addressing]]",
-        "de": "Schreibe Holding Register [[register]] mit Wert [[value]] mit Adressierung [[addressing]]"
+        "en": "Write Holding Register [[register]] with value [[value]] of type [[type]] with addressing [[addressing]]",
+        "de": "Schreibe Holding Register [[register]] mit Wert [[value]] vom Typ [[type]] mit Adressierung [[addressing]]"
     },
     "hint": {
         "en": "Reads a Modbus register from a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
@@ -61,6 +61,29 @@
                         "en": "Register, starting with #1",
                         "de": "Register, beginnend mit #1"
                     }
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "name": "type",
+            "required": false,
+            "title": { 
+                "en": "Type",
+                "de": "Typ"
+            },
+            "hint":{
+                "en": "If not specified, the type UINT16 is used.",
+                "de": "Wenn nicht angegeben, wird der Typ UINT16 verwendet."
+            },
+            "values":[
+                {
+                    "id": "INT16",
+                    "title": "INT16"
+                },
+                {
+                    "id": "UINT16",
+                    "title": "UINT16"
                 }
             ]
         }

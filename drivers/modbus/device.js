@@ -315,13 +315,34 @@ module.exports = class ModbusDevice extends Homey.Device {
         }
     }
 
-    async writeAddress(client = this._client, address, value){
+    async writeAddress(client = this._client, address, value, type='UINT16'){
         this.log("Write register: "+address+' value: '+value);
         try{
             if (this._settings.connection === 'single') {
                 await this.connectDevice();
             }
-            await client.writeSingleRegister(address, value)
+            // await client.writeSingleRegister(address, Number(value))
+            let buffer;
+            switch (type) {
+                case 'INT16':
+                    if (value < -32768 || value > 32767){
+                        throw new Error("Value out of range for INT16: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(2);
+                    buffer.writeInt16BE(value);
+                    break;
+                case 'UINT16':
+                    if (value < 0 || value > 65535){
+                        throw new Error("Value out of range for UINT16: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(2);
+                    buffer.writeUInt16BE(value);
+                    break;
+                default:
+                    throw new error("Invalid type: "+type);
+            }
+            
+            await client.writeMultipleRegisters( address, buffer)
             this.log("Write register: Succcess");
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
@@ -338,16 +359,16 @@ module.exports = class ModbusDevice extends Homey.Device {
 
         
     // FLOW ACTIONS ==============================================================================
-    async flowActionReadAddress(address, size, type='STRING'){
+    async flowActionReadAddress(address, size, type){
         return await this.readAddress(this._client, address, size, type, REGISTER_HOLDING);
     }
 
-    async flowActionReadAddressInput(address, size, type='STRING'){
+    async flowActionReadAddressInput(address, size, type){
         return await this.readAddress(this._client, address, size, type, REGISTER_INPUT);
     }
 
-    async flowActionWriteAddress(address, value){
-        await this.writeAddress(this._client, address, value);
+    async flowActionWriteAddress(address, value, type){
+        await this.writeAddress(this._client, address, value, type);
     }
 
     async flowActionConnectDevice(){
