@@ -40,5 +40,8 @@
   },
   "0.4.1": {
     "en": "Added data type to write register flow card"
+  },
+  "0.4.2": {
+    "en": "Changed size parameter to optional value (only needed for STRING), Added longer timeout for connection"
   }
 }

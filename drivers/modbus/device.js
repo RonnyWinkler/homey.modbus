@@ -3,6 +3,7 @@
 const Homey = require('homey');
 const net = require('net');
 const Modbus = require('jsmodbus');	
+const { Z_ASCII } = require('zlib');
 
 const RETRY_INTERVAL = 60 * 1000; 
 const REGISTER_HOLDING = 'HOLDING';
@@ -31,7 +32,7 @@ module.exports = class ModbusDevice extends Homey.Device {
         this._socket = new net.Socket();
         // await this.disconnectDevice();
 
-        this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
+        this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId, 3500);
         this._socket.setKeepAlive(true);
         this._socket.setMaxListeners(99);
         //socket.setTimeout(15000);
@@ -80,7 +81,6 @@ module.exports = class ModbusDevice extends Homey.Device {
         }
         return new Promise((resolve, reject) => {
             this.log('Device connect: '+this.getName()+' to IP '+this._modbusOptions.host+' port '+this._modbusOptions.port+' ID '+this._modbusOptions.unitId);
-            // this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
 
             const errorHandler = (error) => {
                 this._socket.removeListener("connect", connectHandler);
@@ -175,7 +175,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                 this._settings = newSettings;
                 this.log("KeepAlive option set. Reconnecting...");
 
-                this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
+                this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId, 3500);
                 // Disconnect
                 try{
                     await this.disconnectDevice();
@@ -227,17 +227,43 @@ module.exports = class ModbusDevice extends Homey.Device {
                 await this.connectDevice();
             }
             this.log("Read register: "+address);
+            // determine size based on type
+            let sizeToRead = 1;
+            if (type == 'STRING'){
+                if (size == undefined){
+                    sizeToRead = 1;
+                }
+                else{
+                    sizeToRead = size;
+                }
+            }
+            else{
+                if (type == 'SCALE' || type.includes('16')){
+                    sizeToRead = 1;
+                }
+                else if (type.includes('32')){
+                    sizeToRead = 2;
+                }
+                else if (type.includes('64')){
+                    sizeToRead = 4;
+                }
+                else{
+                    sizeToRead = 1;
+                }
+            }
+            // read register
             let res;
             if (registerType == REGISTER_HOLDING){
-                res = await client.readHoldingRegisters(address, size);
+                res = await client.readHoldingRegisters(address, sizeToRead);
             }
             else if (registerType == REGISTER_INPUT){
-                res = await client.readInputRegisters(address, size);
+                res = await client.readInputRegisters(address, sizeToRead);
             }
             else
             {
                 throw new Error("Invalid register type: "+registerType);
             }
+            // convert output value
             let valueNumeric = 0;
             let valueString;
             switch (type) {
@@ -268,7 +294,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = res.response.body.valuesAsBuffer.readBigUint64BE();
                     valueString = valueNumeric.toString();
                     break;
-                case 'FLOAT':
+                case 'FLOAT16':
                     valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
                     valueString = valueNumeric.toString();
                     break;
