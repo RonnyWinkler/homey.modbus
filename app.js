@@ -61,6 +61,30 @@ module.exports = class ModbusApp extends Homey.App {
         }
     });
 
+    this.homey.flow.getActionCard('read_register_coil')
+    .registerRunListener(async (args, state) => {
+        let register =  args.register;
+        if (args.addressing == "1"){
+          register = args.register - 1;
+        }  
+        let {valueBoolean} = await args.device.flowActionReadAddressCoil( register );
+        return {
+          "value_boolean": valueBoolean
+        }
+    });
+
+    this.homey.flow.getActionCard('read_register_discrete')
+    .registerRunListener(async (args, state) => {
+        let register =  args.register;
+        if (args.addressing == "1"){
+          register = args.register - 1;
+        }  
+        let {valueBoolean} = await args.device.flowActionReadAddressDiscrete( register );
+        return {
+          "value_boolean": valueBoolean
+        }
+    });
+
     this.homey.flow.getActionCard('write_register')
     .registerRunListener(async (args, state) => {
       let register =  args.register;

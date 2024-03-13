@@ -8,6 +8,8 @@ const { Z_ASCII } = require('zlib');
 const RETRY_INTERVAL = 60 * 1000; 
 const REGISTER_HOLDING = 'HOLDING';
 const REGISTER_INPUT = 'INPUT';
+const REGISTER_COIL = 'COIL';
+const REGISTER_DISCRETE = 'DISCRETE';
 
 module.exports = class ModbusDevice extends Homey.Device {
 	_modbusOptions = {
@@ -237,6 +239,9 @@ module.exports = class ModbusDevice extends Homey.Device {
                     sizeToRead = size;
                 }
             }
+            if (type == 'BOOL'){
+                sizeToRead = 1;
+            }
             else{
                 if (type == 'SCALE' || type.includes('16')){
                     sizeToRead = 1;
@@ -259,6 +264,12 @@ module.exports = class ModbusDevice extends Homey.Device {
             else if (registerType == REGISTER_INPUT){
                 res = await client.readInputRegisters(address, sizeToRead);
             }
+            else if (registerType == REGISTER_COIL){
+                res = await client.readCoils(address, sizeToRead);
+            }
+            else if (registerType == REGISTER_DISCRETE){
+                res = await client.readDiscreteInputs(address, sizeToRead);
+            }
             else
             {
                 throw new Error("Invalid register type: "+registerType);
@@ -266,6 +277,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             // convert output value
             let valueNumeric = 0;
             let valueString;
+            let valueBoolean;
             switch (type) {
                 case 'STRING':
                     valueString = res.response.body.valuesAsBuffer.toString();
@@ -310,6 +322,9 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = Math.pow(10, res.response.body.valuesAsBuffer.readInt16BE());
                     valueString = valueNumeric.toString();
                     break;
+                case 'BOOL':
+                    valueBoolean = res[0];
+                    break;
                 default:
                     break;
             }
@@ -318,7 +333,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
-            return {valueString, valueNumeric};
+            return {valueString, valueNumeric, valueBoolean};
         }
         catch(error){
             if (this._settings.connection === 'single') {
@@ -391,6 +406,14 @@ module.exports = class ModbusDevice extends Homey.Device {
 
     async flowActionReadAddressInput(address, size, type){
         return await this.readAddress(this._client, address, size, type, REGISTER_INPUT);
+    }
+
+    async flowActionReadAddressDiscrete(address){
+        return await this.readAddress(this._client, address, 1, 'BOOL', REGISTER_DISCRETE);
+    }
+
+    async flowActionReadAddressCoil(address){
+        return await this.readAddress(this._client, address, 1, 'BOOL', REGISTER_COIL);
     }
 
     async flowActionWriteAddress(address, value, type){
