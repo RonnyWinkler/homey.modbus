@@ -34,7 +34,7 @@ module.exports = class ModbusDevice extends Homey.Device {
         this._socket = new net.Socket();
         // await this.disconnectDevice();
 
-        this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId, 3500);
+        this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
         this._socket.setKeepAlive(true);
         this._socket.setMaxListeners(99);
         //socket.setTimeout(15000);
@@ -177,7 +177,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                 this._settings = newSettings;
                 this.log("KeepAlive option set. Reconnecting...");
 
-                this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId, 3500);
+                this._client = new Modbus.client.TCP(this._socket, this._modbusOptions.unitId);
                 // Disconnect
                 try{
                     await this.disconnectDevice();

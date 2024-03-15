@@ -9,7 +9,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         this.log('Device init: '+this.getName()+' ID: '+this.getData().id);
         this.setWarning(this.homey.__("device.modbus.device_info"));
         this._settings = this.getSettings();
-        this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id, 3500);
+        this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
     }
 
     /**
@@ -25,7 +25,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
             try {
                 this.log("IP address or port changed. Reconnecting...");
                 this._settings = newSettings;
-                this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id, 3500);
+                this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
 
                 try{
                     await this.getParent().reconnectDevice();
