@@ -286,36 +286,72 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = res.response.body.valuesAsBuffer.readInt16BE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'INT16LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readInt16LE();
+                    valueString = valueNumeric.toString();
+                    break;
                 case 'INT32':
                     valueNumeric = res.response.body.valuesAsBuffer.readInt32BE();
+                    valueString = valueNumeric.toString();
+                    break;
+                case 'INT32LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readInt32LE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'INT64':
                     valueNumeric = res.response.body.valuesAsBuffer.readBigInt64BE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'INT64LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readBigInt64LE();
+                    valueString = valueNumeric.toString();
+                    break;
                 case 'UINT16':
                     valueNumeric = res.response.body.valuesAsBuffer.readUInt16BE();
+                    valueString = valueNumeric.toString();
+                    break;
+                case 'UINT16LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readUInt16LE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'UINT32':
                     valueNumeric = res.response.body.valuesAsBuffer.readUInt32BE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'UINT32LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readUInt32LE();
+                    valueString = valueNumeric.toString();
+                    break;
                 case 'UINT64':
                     valueNumeric = res.response.body.valuesAsBuffer.readBigUint64BE();
                     valueString = valueNumeric.toString();
                     break;
-                case 'FLOAT16':
+                case 'UINT64LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readBigUint64LE();
+                    valueString = valueNumeric.toString();
+                    break;
+                // case 'FLOAT16':
+                //     valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
+                //     valueString = valueNumeric.toString();
+                //     break;
+                // case 'FLOAT16LE':
+                //     valueNumeric = res.response.body.valuesAsBuffer.readFloatLE();
+                //     valueString = valueNumeric.toString();
+                //     break;
+                case 'FLOAT32':
                     valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
                     valueString = valueNumeric.toString();
                     break;
-                case 'FLOAT32':
-                    valueNumeric = res.response.body.valuesAsBuffer.swap16().swap32().readFloatBE();
+                case 'FLOAT32LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readFloatLE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'FLOAT64':
-                    valueNumeric = res.response.body.valuesAsBuffer.swap16().swap32().swap64().readFloatBE();
+                    valueNumeric = res.response.body.valuesAsBuffer.readDoubleBE();
+                    valueString = valueNumeric.toString();
+                    break;
+                case 'FLOAT64LE':
+                    valueNumeric = res.response.body.valuesAsBuffer.readDoubleLE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'SCALE':
