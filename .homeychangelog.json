@@ -52,5 +52,8 @@
   },
   "0.6.0": {
     "en": "Added new Types: little-endian (LE) for all typed, Removed FLOAT16"
+  },
+  "0.6.1": {
+    "en": "Fixed reading size for STRING registers"
   }
 }

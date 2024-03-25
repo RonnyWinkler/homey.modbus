@@ -239,7 +239,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                     sizeToRead = size;
                 }
             }
-            if (type == 'BOOL'){
+            else if (type == 'BOOL'){
                 sizeToRead = 1;
             }
             else{
