@@ -55,5 +55,8 @@
   },
   "0.6.1": {
     "en": "Fixed reading size for STRING registers"
+  },
+  "0.7.0": {
+    "en": "Added new Types: little-endian (LE) for 16bit words (1 register)"
   }
 }

@@ -35,8 +35,8 @@
                 "de": "Größe für Typ STRING"
             },
             "hint": {
-                "en": "Define the length of the string (number of registers). For other data types, the length is determined automatically. The specification is optional.",
-                "de": "Definiere die Länge des Strings (Anzhal Register). Für andere Datentypen wird die Länge automatisch bestimmt. Die Angabe ist optional."
+                "en": "Define the length of the string/bytes (number of registers). For other data types, the length is determined automatically. The specification is optional.",
+                "de": "Definiere die Länge des Strings/Bytes (Anzhal Register). Für andere Datentypen wird die Länge automatisch bestimmt. Die Angabe ist optional."
             }
         },
         {
@@ -68,12 +68,20 @@
                     "title": "INT32-LE"
                 },
                 {
+                    "id": "INT32LER",
+                    "title": "INT32-LE (16bit Word LE)"
+                },
+                {
                     "id": "INT64",
                     "title": "INT64"
                 },
                 {
                     "id": "INT64LE",
                     "title": "INT64-LE"
+                },
+                {
+                    "id": "INT64LER",
+                    "title": "INT64-LE (16bit Word LE)"
                 },
                 {
                     "id": "UINT16",
@@ -92,12 +100,20 @@
                     "title": "UINT32-LE"
                 },
                 {
+                    "id": "UNT32LER",
+                    "title": "UINT32-LE (16bit Word LE)"
+                },
+                {
                     "id": "UINT64",
                     "title": "UINT64"
                 },
                 {
                     "id": "UINT64LE",
                     "title": "UINT64LE"
+                },
+                {
+                    "id": "UNT64LER",
+                    "title": "UINT64-LE (16bit Word LE)"
                 },
                 {
                     "id": "FLOAT32",
@@ -108,6 +124,10 @@
                     "title": "FLOAT32-LE"
                 },
                 {
+                    "id": "FLOAT32LER",
+                    "title": "FLOAT32-LE (16bit Word LE)"
+                },
+                {
                     "id": "FLOAT64",
                     "title": "FLOAT64"
                 },
@@ -116,8 +136,16 @@
                     "title": "FLOAT64-LE"
                 },
                 {
+                    "id": "FLOAT64LER",
+                    "title": "FLOAT64-LE (16bit Word LE)"
+                },
+                {
                     "id": "SCALE",
                     "title": "SCALE / SUNSSF, 10^x Factor based on sunssf value"
+                },
+                {
+                    "id": "BYTE",
+                    "title": "BYTE"
                 }
             ]
         },

@@ -87,5 +87,15 @@
                 }
             ]
         }
-      ]
+      ],
+      "tokens":[
+        {
+            "name": "bytes",
+            "type": "string",
+            "title": { 
+                "en": "Bytes written",
+                "de": "Bytes geschrieben" 
+            }
+        }
+    ]
 }

@@ -231,7 +231,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             this.log("Read register: "+address);
             // determine size based on type
             let sizeToRead = 1;
-            if (type == 'STRING'){
+            if (type == 'STRING' || 'BYTE'){
                 if (size == undefined){
                     sizeToRead = 1;
                 }
@@ -282,6 +282,10 @@ module.exports = class ModbusDevice extends Homey.Device {
                 case 'STRING':
                     valueString = res.response.body.valuesAsBuffer.toString();
                     break;
+                case 'BYTE':
+                    valueString = res.response.body.valuesAsBuffer.toString('hex').toUpperCase();
+                    valueString = valueString.replace(/(.{2})/g,"$1 ").trimEnd();
+                    break;
                 case 'INT16':
                     valueNumeric = res.response.body.valuesAsBuffer.readInt16BE();
                     valueString = valueNumeric.toString();
@@ -298,6 +302,10 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = res.response.body.valuesAsBuffer.readInt32LE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'INT32LER':
+                    valueNumeric = res.response.body.valuesAsBuffer.swap32().swap16().readInt32BE();
+                    valueString = valueNumeric.toString();
+                    break;
                 case 'INT64':
                     valueNumeric = res.response.body.valuesAsBuffer.readBigInt64BE();
                     valueString = valueNumeric.toString();
@@ -306,12 +314,20 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = res.response.body.valuesAsBuffer.readBigInt64LE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'INT64LER':
+                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap32().swap16().readInt64BE();
+                    valueString = valueNumeric.toString();
+                    break;
                 case 'UINT16':
                     valueNumeric = res.response.body.valuesAsBuffer.readUInt16BE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'UINT16LE':
                     valueNumeric = res.response.body.valuesAsBuffer.readUInt16LE();
+                    valueString = valueNumeric.toString();
+                    break;
+                case 'UINT32LER':
+                    valueNumeric = res.response.body.valuesAsBuffer.swap32().swap16().readUInt32BE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'UINT32':
@@ -330,6 +346,10 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = res.response.body.valuesAsBuffer.readBigUint64LE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'UINT64LER':
+                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap32().swap16().readUInt64BE();
+                    valueString = valueNumeric.toString();
+                    break;
                 // case 'FLOAT16':
                 //     valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
                 //     valueString = valueNumeric.toString();
@@ -346,12 +366,20 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueNumeric = res.response.body.valuesAsBuffer.readFloatLE();
                     valueString = valueNumeric.toString();
                     break;
+                case 'FLOAT32LER':
+                    valueNumeric = res.response.body.valuesAsBuffer.swap32().swap16().readFloatBE();
+                    valueString = valueNumeric.toString();
+                    break;
                 case 'FLOAT64':
                     valueNumeric = res.response.body.valuesAsBuffer.readDoubleBE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'FLOAT64LE':
                     valueNumeric = res.response.body.valuesAsBuffer.readDoubleLE();
+                    valueString = valueNumeric.toString();
+                    break;
+                case 'FLOAT64LER':
+                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap32().swap16().readDoubleBE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'SCALE':
@@ -424,6 +452,9 @@ module.exports = class ModbusDevice extends Homey.Device {
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
+            return {
+                bytes: buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd()
+            }
         }
         catch(error){
             if (this._settings.connection === 'single') {
@@ -453,7 +484,7 @@ module.exports = class ModbusDevice extends Homey.Device {
     }
 
     async flowActionWriteAddress(address, value, type){
-        await this.writeAddress(this._client, address, value, type);
+        return await this.writeAddress(this._client, address, value, type);
     }
 
     async flowActionConnectDevice(){
