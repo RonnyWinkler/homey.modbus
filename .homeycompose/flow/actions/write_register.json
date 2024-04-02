@@ -5,8 +5,8 @@
         "de": "Schreibe Holding Register"
     },
     "titleFormatted": {
-        "en": "Write Holding Register [[register]] with value [[value]] of type [[type]] with addressing [[addressing]]",
-        "de": "Schreibe Holding Register [[register]] mit Wert [[value]] vom Typ [[type]] mit Adressierung [[addressing]]"
+        "en": "Write Holding Register [[register]] with value [[value]] of type [[type]] with addressing [[addressing]] in [[mode]]",
+        "de": "Schreibe Holding Register [[register]] mit Wert [[value]] vom Typ [[type]] mit Adressierung [[addressing]] in [[mode]]"
     },
     "hint": {
         "en": "Reads a Modbus register from a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
@@ -82,8 +82,70 @@
                     "title": "INT16"
                 },
                 {
+                    "id": "INT16LE",
+                    "title": "INT16-LE"
+                },
+                {
+                    "id": "INT32",
+                    "title": "INT32"
+                },
+                {
+                    "id": "INT32LE",
+                    "title": "INT32-LE"
+                },
+                {
+                    "id": "INT32LER",
+                    "title": "INT32-LE (16bit Word LE)"
+                },
+                {
                     "id": "UINT16",
                     "title": "UINT16"
+                },
+                {
+                    "id": "UINT16LE",
+                    "title": "UINT16-LE"
+                },
+                {
+                    "id": "UINT32",
+                    "title": "UINT32 / ACC32"
+                },
+                {
+                    "id": "UINT32LE",
+                    "title": "UINT32-LE"
+                },
+                {
+                    "id": "UNT32LER",
+                    "title": "UINT32-LE (16bit Word LE)"
+                }
+            ]
+        },
+        {
+            "type": "dropdown",
+            "name": "mode",
+            "required": false,
+            "title": { 
+                "en": "Mode",
+                "de": "Modus"
+            },
+            "hint":{
+                "en": "If not specified, the live mode is used. Use the test mode to check the resulting byte sequence.",
+                "de": "Wenn nicht angegeben, wird der Echt-Modus verwendet. Verwende den Testmodus, um die resultierende Byte-Sequenz zu überprüfen."
+            },
+            "value": "live",
+            "values":[
+                {
+                    "id": "live",
+                    "title": {
+                        "en": "Live mode",
+                        "de": "Echt-Modus"
+                    }
+                },
+                {
+                    "id": "test",
+                    "title": {
+                        "en": "Test mode",
+                        "de": "Test-Modus"
+                    }
                 }
             ]
         }

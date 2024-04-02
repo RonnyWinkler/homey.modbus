@@ -315,7 +315,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueString = valueNumeric.toString();
                     break;
                 case 'INT64LER':
-                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap32().swap16().readInt64BE();
+                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap16().readInt64BE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'UINT16':
@@ -347,17 +347,9 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueString = valueNumeric.toString();
                     break;
                 case 'UINT64LER':
-                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap32().swap16().readUInt64BE();
+                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap16().readUInt64BE();
                     valueString = valueNumeric.toString();
                     break;
-                // case 'FLOAT16':
-                //     valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
-                //     valueString = valueNumeric.toString();
-                //     break;
-                // case 'FLOAT16LE':
-                //     valueNumeric = res.response.body.valuesAsBuffer.readFloatLE();
-                //     valueString = valueNumeric.toString();
-                //     break;
                 case 'FLOAT32':
                     valueNumeric = res.response.body.valuesAsBuffer.readFloatBE();
                     valueString = valueNumeric.toString();
@@ -379,7 +371,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueString = valueNumeric.toString();
                     break;
                 case 'FLOAT64LER':
-                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap32().swap16().readDoubleBE();
+                    valueNumeric = res.response.body.valuesAsBuffer.swap64().swap16().readDoubleBE();
                     valueString = valueNumeric.toString();
                     break;
                 case 'SCALE':
@@ -420,8 +412,8 @@ module.exports = class ModbusDevice extends Homey.Device {
         }
     }
 
-    async writeAddress(client = this._client, address, value, type='UINT16'){
-        this.log("Write register: "+address+' value: '+value);
+    async writeAddress(client = this._client, address, value, type='UINT16', mode='live'){
+        this.log("Write register: "+address+' value: '+value+" mode: "+mode);
         try{
             if (this._settings.connection === 'single') {
                 await this.connectDevice();
@@ -436,6 +428,34 @@ module.exports = class ModbusDevice extends Homey.Device {
                     buffer = Buffer.allocUnsafe(2);
                     buffer.writeInt16BE(value);
                     break;
+                case 'INT16LE':
+                    if (value < -32768 || value > 32767){
+                        throw new Error("Value out of range for INT16LE: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(2);
+                    buffer.writeInt16LE(value);
+                    break;
+                case 'INT32':
+                    if (value < -2147483648 || value > 2147483647){
+                        throw new Error("Value out of range for INT32: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeInt32BE(value);
+                    break;
+                case 'INT32LE':
+                    if (value < -2147483648 || value > 2147483647){
+                        throw new Error("Value out of range for INT32LE: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeInt32LE(value);
+                    break;
+                case 'INT32LER':
+                    if (value < -2147483648 || value > 2147483647){
+                        throw new Error("Value out of range for INT32LER: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.swap32().swap16().writeInt32BE(value);
+                    break;
                 case 'UINT16':
                     if (value < 0 || value > 65535){
                         throw new Error("Value out of range for UINT16: "+value);
@@ -443,17 +463,48 @@ module.exports = class ModbusDevice extends Homey.Device {
                     buffer = Buffer.allocUnsafe(2);
                     buffer.writeUInt16BE(value);
                     break;
+                case 'UINT16LE':
+                    if (value < 0 || value > 65535){
+                        throw new Error("Value out of range for UINT16LE: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(2);
+                    buffer.writeUInt16LE(value);
+                    break;
+                case 'UINT32':
+                    if (value < 0 || value > 4294967295){
+                        throw new Error("Value out of range for UINT32: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeUInt32BE(value);
+                    break;
+                case 'UINT32LE':
+                    if (value < 0 || value > 4294967295){
+                        throw new Error("Value out of range for UINT32LE: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeUInt32LE(value);
+                    break;
+                case 'UINT32LER':
+                    if (value < 0 || value > 4294967295){
+                        throw new Error("Value out of range for UINT32LER: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.swap32().swap16().writeUInt32BE(value);
+                    break;
                 default:
                     throw new error("Invalid type: "+type);
             }
             
-            await client.writeMultipleRegisters( address, buffer)
-            this.log("Write register: Succcess");
+            if (mode === 'live'){
+                await client.writeMultipleRegisters( address, buffer);
+            }
+            let bytes = buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd(); 
+            this.log("Write register: Succcess, Bytes: " + bytes);
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
             return {
-                bytes: buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd()
+                bytes: bytes
             }
         }
         catch(error){
@@ -483,8 +534,8 @@ module.exports = class ModbusDevice extends Homey.Device {
         return await this.readAddress(this._client, address, 1, 'BOOL', REGISTER_COIL);
     }
 
-    async flowActionWriteAddress(address, value, type){
-        return await this.writeAddress(this._client, address, value, type);
+    async flowActionWriteAddress(address, value, type, mode){
+        return await this.writeAddress(this._client, address, value, type, mode);
     }
 
     async flowActionConnectDevice(){

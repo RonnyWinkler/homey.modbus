@@ -58,5 +58,8 @@
   },
   "0.7.0": {
     "en": "Added new Types: little-endian (LE) for 16bit words (1 register)"
+  },
+  "0.7.1": {
+    "en": "Added new Types to write register flow card"
   }
 }

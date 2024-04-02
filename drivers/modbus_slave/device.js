@@ -89,8 +89,8 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         return await this.getParent().readAddress(this.getClient(), address, size, type);
     }
 
-    async writeAddress(address, value, type){
-        await this._parent.writeAddress(this.getClient(), address, value, type);
+    async writeAddress(address, value, type, mode){
+        await this._parent.writeAddress(this.getClient(), address, value, type, mode);
     }
 
         
