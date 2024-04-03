@@ -231,7 +231,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             this.log("Read register: "+address);
             // determine size based on type
             let sizeToRead = 1;
-            if (type == 'STRING' || 'BYTE'){
+            if (type == 'STRING' || type == 'BYTE'){
                 if (size == undefined){
                     sizeToRead = 1;
                 }

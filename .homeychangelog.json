@@ -64,5 +64,8 @@
   },
   "0.7.2": {
     "en": "Fixed (U)INT-LE 16bit for write register flow card"
+  },
+  "0.7.3": {
+    "en": "Fixed size for read register flow card"
   }
 }
