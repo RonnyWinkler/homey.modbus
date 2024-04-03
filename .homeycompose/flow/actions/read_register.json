@@ -31,8 +31,8 @@
             "name": "size",
             "required": false,
             "title": {
-                "en": "Size for type STRING",
-                "de": "Größe für Typ STRING"
+                "en": "Size for type STRING or BYTE",
+                "de": "Größe für Typ STRING oder BYTE"
             },
             "hint": {
                 "en": "Define the length of the string/bytes (number of registers). For other data types, the length is determined automatically. The specification is optional.",

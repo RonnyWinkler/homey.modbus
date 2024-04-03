@@ -454,7 +454,8 @@ module.exports = class ModbusDevice extends Homey.Device {
                         throw new Error("Value out of range for INT32LER: "+value);
                     }
                     buffer = Buffer.allocUnsafe(4);
-                    buffer.swap32().swap16().writeInt32BE(value);
+                    buffer.writeInt32BE(value);
+                    buffer.swap32().swap16();
                     break;
                 case 'UINT16':
                     if (value < 0 || value > 65535){
@@ -489,7 +490,8 @@ module.exports = class ModbusDevice extends Homey.Device {
                         throw new Error("Value out of range for UINT32LER: "+value);
                     }
                     buffer = Buffer.allocUnsafe(4);
-                    buffer.swap32().swap16().writeUInt32BE(value);
+                    buffer.writeUInt32BE(value);
+                    buffer.swap32().swap16();
                     break;
                 default:
                     throw new error("Invalid type: "+type);
