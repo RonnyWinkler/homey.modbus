@@ -9,6 +9,9 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         this.log('Device init: '+this.getName()+' ID: '+this.getData().id);
         this.setWarning(this.homey.__("device.modbus.device_info"));
         this._settings = this.getSettings();
+
+        // wait for master device init
+        await this.delay(2000);
         this._client = new Modbus.client.TCP(this.getParent().getSocket(), this._settings.id);
     }
 
@@ -57,6 +60,10 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
 
     onUninit() {
         this.log('Uninit device: ', this.getData().id);
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     getParent(){

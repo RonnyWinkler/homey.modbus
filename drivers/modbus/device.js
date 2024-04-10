@@ -67,7 +67,7 @@ module.exports = class ModbusDevice extends Homey.Device {
 
         // Connect to device
         // wait for slave device init
-        await this.delay(2000);
+        await this.delay(4000);
         if (this._settings.connection === 'keep' && this._socket) {
             this.log("KeepAlive option set. Reconnecting...");
             await this.connectDevice();

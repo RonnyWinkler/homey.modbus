@@ -67,5 +67,8 @@
   },
   "0.7.3": {
     "en": "Fixed size for read register flow card"
+  },
+  "0.7.4": {
+    "en": "Fixed init error of slave device"
   }
 }
