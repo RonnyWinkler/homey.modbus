@@ -70,5 +70,8 @@
   },
   "0.7.4": {
     "en": "Fixed init error of slave device"
+  },
+  "0.7.5": {
+    "en": "Extended error handling"
   }
 }

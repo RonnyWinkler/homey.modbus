@@ -82,7 +82,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             return;
         }
         return new Promise((resolve, reject) => {
-            this.log('Device connect: '+this.getName()+' to IP '+this._modbusOptions.host+' port '+this._modbusOptions.port+' ID '+this._modbusOptions.unitId);
+            this.log('Connect device: '+this.getName()+' to IP '+this._modbusOptions.host+' port '+this._modbusOptions.port+' ID '+this._modbusOptions.unitId);
 
             const errorHandler = (error) => {
                 this._socket.removeListener("connect", connectHandler);
@@ -113,7 +113,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             return;
         }
         return new Promise((resolve, reject) => {
-            this.log('Device disconnected: '+this.getName());
+            this.log('Disconnect device: '+this.getName());
 
             const errorHandler = (error) => {
                 this._socket.removeListener("close", disconnectHandler);
@@ -497,11 +497,18 @@ module.exports = class ModbusDevice extends Homey.Device {
                     throw new error("Invalid type: "+type);
             }
             
+            let bytes = buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd(); 
+
+            this.log("Write register: Bytes: " + bytes);
             if (mode === 'live'){
+                this.log("Write register: Live mode");
                 await client.writeMultipleRegisters( address, buffer);
             }
-            let bytes = buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd(); 
-            this.log("Write register: Succcess, Bytes: " + bytes);
+            else{
+                this.log("Write register: Simulation mode");
+            }
+            this.log("Write register: Succcess");
+
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
@@ -510,11 +517,23 @@ module.exports = class ModbusDevice extends Homey.Device {
             }
         }
         catch(error){
+            this.log("Error writing register: ", error.message);
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
-            this.log("Error writing register: ", error.message);
-            throw error;
+            let message = '';
+            if (error instanceof Error && error.message){
+                message = error.message;
+            }
+            else{
+                if (typeof error === 'string'){
+                    message = error;
+                }
+                else if (typeof error === 'object'){
+                    message = JSON.stringify(error);
+                }
+            }
+            throw new Error(message);
         }
     }
 
