@@ -1,6 +1,6 @@
 {
   "id": "org.modbus",
-  "version": "0.7.6",
+  "version": "0.7.7",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "name": {

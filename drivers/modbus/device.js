@@ -517,6 +517,8 @@ module.exports = class ModbusDevice extends Homey.Device {
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
+
+            this.log("Write register: Return token: "+bytes);
             return {
                 bytes: bytes
             }
