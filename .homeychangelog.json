@@ -73,5 +73,8 @@
   },
   "0.7.5": {
     "en": "Extended error handling"
+  },
+  "0.7.6": {
+    "en": "Splitted writing registers into single (16bit) and multi register action (>16bit)"
   }
 }

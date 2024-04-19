@@ -502,7 +502,12 @@ module.exports = class ModbusDevice extends Homey.Device {
             this.log("Write register: Bytes: " + bytes);
             if (mode === 'live'){
                 this.log("Write register: Live mode");
-                await client.writeMultipleRegisters( address, buffer);
+                if ( buffer.byteLength > 2){
+                    await client.writeMultipleRegisters( address, buffer);
+                }
+                else{
+                    await client.writeSingleRegister( address, buffer.readUInt16BE());
+                }
             }
             else{
                 this.log("Write register: Simulation mode");
