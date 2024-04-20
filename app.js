@@ -91,10 +91,11 @@ module.exports = class ModbusApp extends Homey.App {
       if (args.addressing == "1"){
         register = args.register - 1;
       }  
-      let {bytes} = await args.device.flowActionWriteAddress( register, args.value, args.type, args.mode);
-      return {
-        "bytes": bytes
+      let bytes = await args.device.flowActionWriteAddress( register, args.value, args.type, args.mode);
+      let tokens = {
+        bytes: bytes
       }
+      return tokens;
     });
 
   }

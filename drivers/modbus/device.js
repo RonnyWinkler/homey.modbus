@@ -508,20 +508,18 @@ module.exports = class ModbusDevice extends Homey.Device {
                 else{
                     await client.writeSingleRegister( address, buffer.readUInt16BE());
                 }
+                this.log("Write register: Succcess");
             }
             else{
                 this.log("Write register: Simulation mode");
             }
-            this.log("Write register: Succcess");
 
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
 
             this.log("Write register: Return token: "+bytes);
-            return {
-                bytes: bytes
-            }
+            return bytes;
         }
         catch(error){
             this.log("Error writing register: ", error.message);

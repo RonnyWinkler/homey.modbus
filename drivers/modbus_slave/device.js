@@ -97,7 +97,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     }
 
     async writeAddress(address, value, type, mode){
-        await this._parent.writeAddress(this.getClient(), address, value, type, mode);
+        return await this._parent.writeAddress(this.getClient(), address, value, type, mode);
     }
 
         
@@ -119,7 +119,7 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     }
 
     async flowActionWriteAddress(address, value, type){
-        await this.writeAddress(address, value, type);
+        return await this.writeAddress(address, value, type);
     }
 
 }
