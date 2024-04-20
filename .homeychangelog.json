@@ -82,5 +82,8 @@
   },
   "0.7.8": {
     "en": "Fixed Slave device flow action tokens."
+  },
+  "0.7.9": {
+    "en": "Added logging for slave device."
   }
 }

@@ -228,7 +228,7 @@ module.exports = class ModbusDevice extends Homey.Device {
             if (this._settings.connection === 'single') {
                 await this.connectDevice();
             }
-            this.log("Read register: "+address);
+            this.log("Read register: "+address, ', size: '+size, ', type: '+type, ', registerType: '+registerType);
             // determine size based on type
             let sizeToRead = 1;
             if (type == 'STRING' || type == 'BYTE'){

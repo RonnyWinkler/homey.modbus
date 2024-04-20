@@ -93,10 +93,12 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
 
     // REGISTER Handling ==============================================================================
     async readAddress(address, size, type){
+        this.log("SLAVE device: Read register: "+address, ', size: '+size, ', type: '+type, ', registerType: '+registerType);
         return await this.getParent().readAddress(this.getClient(), address, size, type);
     }
 
     async writeAddress(address, value, type, mode){
+        this.log("SLAVE device: Write register: "+address+' value: '+value+" mode: "+mode);
         return await this._parent.writeAddress(this.getClient(), address, value, type, mode);
     }
 
