@@ -85,5 +85,8 @@
   },
   "0.7.9": {
     "en": "Added logging for slave device."
+  },
+  "0.7.10": {
+    "en": "Fixed reading register for slave device."
   }
 }

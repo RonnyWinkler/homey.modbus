@@ -2,6 +2,10 @@
 
 const Homey = require('homey');
 const Modbus = require('jsmodbus');	
+const REGISTER_HOLDING = 'HOLDING';
+const REGISTER_INPUT = 'INPUT';
+const REGISTER_COIL = 'COIL';
+const REGISTER_DISCRETE = 'DISCRETE';
 
 module.exports = class ModbusSlaveDevice extends Homey.Device {
 
@@ -92,24 +96,24 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
     }
 
     // REGISTER Handling ==============================================================================
-    async readAddress(address, size, type){
-        this.log("SLAVE device: Read register: "+address, ', size: '+size, ', type: '+type, ', registerType: '+registerType);
+    async readAddress(address, size, type, registerType){
+        this.log("SLAVE device: Read register: "+address, ' size: '+size+' type: '+type+" registerType: "+registerType);
         return await this.getParent().readAddress(this.getClient(), address, size, type);
     }
 
     async writeAddress(address, value, type, mode){
-        this.log("SLAVE device: Write register: "+address+' value: '+value+" mode: "+mode);
+        this.log("SLAVE device: Write register: "+address+' value: '+value+" type: "+type+" mode: "+mode);
         return await this._parent.writeAddress(this.getClient(), address, value, type, mode);
     }
 
         
     // FLOW ACTIONS ==============================================================================
     async flowActionReadAddress(address, size, type){
-        return await this.readAddress(address, size, type, 'HOLDING');
+        return await this.readAddress(address, size, type, REGISTER_HOLDING);
     }
 
     async flowActionReadAddressInput(address, size, type){
-        return await this.readAddress(address, size, type, 'INPUT');
+        return await this.readAddress(address, size, type, REGISTER_INPUT);
     }
 
     async flowActionReadAddressDiscrete(address){
