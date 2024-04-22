@@ -116,6 +116,18 @@
                 {
                     "id": "UNT32LER",
                     "title": "UINT32-LE (16bit Word LE)"
+                },
+                {
+                    "id": "FLOAT32",
+                    "title": "FLOAT32"
+                },
+                {
+                    "id": "FLOAT32LE",
+                    "title": "FLOAT32-LE"
+                },
+                {
+                    "id": "FLOAT32LER",
+                    "title": "FLOAT32-LE (16bit Word LE)"
                 }
             ]
         },

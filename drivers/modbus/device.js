@@ -493,6 +493,28 @@ module.exports = class ModbusDevice extends Homey.Device {
                     buffer.writeUInt32BE(value);
                     buffer.swap32().swap16();
                     break;
+                case 'FLOAT32':
+                    if (value < -3.4028234663852886e+38 || value > 3.4028234663852886e+38){
+                        throw new Error("Value out of range for FLOAT32: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeFloatBE(value);
+                    break;
+                case 'FLOAT32LE':
+                    if (value < -3.4028234663852886e+38 || value > 3.4028234663852886e+38){
+                        throw new Error("Value out of range for FLOAT32: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeFloatLE(value);
+                    break;
+                case 'FLOAT32LER':
+                    if (value < -3.4028234663852886e+38 || value > 3.4028234663852886e+38){
+                        throw new Error("Value out of range for FLOAT32: "+value);
+                    }
+                    buffer = Buffer.allocUnsafe(4);
+                    buffer.writeFloatBE(value);
+                    buffer.swap32().swap16();
+                    break;
                 default:
                     throw new error("Invalid type: "+type);
             }

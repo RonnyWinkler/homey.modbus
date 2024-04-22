@@ -88,5 +88,8 @@
   },
   "0.7.10": {
     "en": "Fixed reading register for slave device."
+  },
+  "0.8.0": {
+    "en": "Added new types to write register flow card (FLOAT32)."
   }
 }
