@@ -98,6 +98,15 @@ module.exports = class ModbusApp extends Homey.App {
       return tokens;
     });
 
+    this.homey.flow.getActionCard('write_register_coil')
+    .registerRunListener(async (args, state) => {
+      let register =  args.register;
+      if (args.addressing == "1"){
+        register = args.register - 1;
+      }  
+      await args.device.flowActionWriteAddressCoil( register, args.value, args.mode);
+    });
+
   }
 
 }

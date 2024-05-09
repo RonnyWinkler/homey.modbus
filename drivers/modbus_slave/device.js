@@ -124,8 +124,12 @@ module.exports = class ModbusSlaveDevice extends Homey.Device {
         return await this.readAddress(address, 1, 'BOOL', REGISTER_COIL);
     }
 
-    async flowActionWriteAddress(address, value, type){
-        return await this.writeAddress(address, value, type);
+    async flowActionWriteAddress(address, value, type, mode){
+        return await this.writeAddress(address, value, type, mode);
+    }
+
+    async flowActionWriteAddressCoil(address, value, mode){
+        return await this.writeAddress(address, value, 'BOOL', mode);
     }
 
 }

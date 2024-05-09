@@ -515,20 +515,33 @@ module.exports = class ModbusDevice extends Homey.Device {
                     buffer.writeFloatBE(value);
                     buffer.swap32().swap16();
                     break;
+                case 'BOOL':
+                    if (typeof value !== 'boolean'){
+                        throw new Error("Invalid value for BOOL: "+value);
+                    }
+                    break;
                 default:
                     throw new error("Invalid type: "+type);
             }
             
-            let bytes = buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd(); 
+            let bytes = '';
+            if (buffer != undefined){
+                bytes = buffer.toString('hex').toUpperCase().replace(/(.{2})/g,"$1 ").trimEnd(); 
+            }
 
             this.log("Write register: Bytes: " + bytes);
             if (mode === 'live'){
                 this.log("Write register: Live mode");
-                if ( buffer.byteLength > 2){
-                    await client.writeMultipleRegisters( address, buffer);
+                if (type === 'BOOL'){
+                    await client.writeSingleCoil( address, value);
                 }
                 else{
-                    await client.writeSingleRegister( address, buffer.readUInt16BE());
+                    if ( buffer.byteLength > 2){
+                        await client.writeMultipleRegisters( address, buffer);
+                    }
+                    else{
+                        await client.writeSingleRegister( address, buffer.readUInt16BE());
+                    }
                 }
                 this.log("Write register: Succcess");
             }
@@ -584,6 +597,10 @@ module.exports = class ModbusDevice extends Homey.Device {
 
     async flowActionWriteAddress(address, value, type, mode){
         return await this.writeAddress(this._client, address, value, type, mode);
+    }
+
+    async flowActionWriteAddressCoil(address, value, mode){
+        return await this.writeAddress(this._client, address, value, 'BOOL', mode);
     }
 
     async flowActionConnectDevice(){

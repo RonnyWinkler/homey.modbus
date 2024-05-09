@@ -91,5 +91,8 @@
   },
   "0.8.0": {
     "en": "Added new types to write register flow card (FLOAT32)."
+  },
+  "0.9.0": {
+    "en": "Added flow card to write Coil register."
   }
 }
