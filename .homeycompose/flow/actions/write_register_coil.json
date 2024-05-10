@@ -9,8 +9,8 @@
         "de": "Schreibe Coil Register [[register]] mit Wert [[value]] mit Adressierung [[addressing]] in [[mode]]"
     },
     "hint": {
-        "en": "Reads a Modbus register from a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
-        "de": "Liest ein Modbus Register von einem Modbus-Gerät. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
+        "en": "Writes a Coil-Modbus register of a Modbus device. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
+        "de": "Schreibt ein Coil-Modbus Register eines Modbus-Geräts. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
     },
     "args": [
         {
