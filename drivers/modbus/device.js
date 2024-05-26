@@ -276,8 +276,8 @@ module.exports = class ModbusDevice extends Homey.Device {
             }
             // convert output value
             let valueNumeric = 0;
-            let valueString;
-            let valueBoolean;
+            let valueString = '';
+            let valueBoolean = false;
             switch (type) {
                 case 'STRING':
                     valueString = res.response.body.valuesAsBuffer.toString();
@@ -379,13 +379,13 @@ module.exports = class ModbusDevice extends Homey.Device {
                     valueString = valueNumeric.toString();
                     break;
                 case 'BOOL':
-                    valueBoolean = res[0];
+                    valueBoolean = res.response.body.valuesAsArray[0] != 0;
                     break;
                 default:
                     break;
             }
 
-            this.log("Response: String: ", valueString, ", Number: ", valueNumeric);
+            this.log("Response: String: ", valueString, ", Number: ", valueNumeric, ", Boolean: ", valueBoolean);
             if (this._settings.connection === 'single') {
                 await this.disconnectDevice();
             }
