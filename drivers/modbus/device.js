@@ -44,20 +44,22 @@ module.exports = class ModbusDevice extends Homey.Device {
         this._socket.on('connect', () => {
             this.log("Socket connected.");
         });
-        this._socket.on('timeout', () => {
+        this._socket.on('timeout', async () => {
             this.log("Socket timeout.");
             this._socket.end();
             if (this._settings.connection === 'keep') {
+                await this.delay(10000);
                 this.connectDevice().catch((error) => { this.log("Error reconnecting on socket.on('timeout'): ", error.message); });
             }
         });
         this._socket.on('error', (error) => {
             this.log("Socket error: ", error.message);
         });
-        this._socket.on('close', (error) => {
+        this._socket.on('close', async (error) => {
             this.log("Socket closed.");
             this._socketConnected = false;
             if (this._settings.connection === 'keep') {
+                await this.delay(10000);
                 this.connectDevice().catch((error) => { this.log("Error reconnecting on socket.on('close'): ", error.message); });
             }
         });
@@ -86,19 +88,30 @@ module.exports = class ModbusDevice extends Homey.Device {
 
             const errorHandler = (error) => {
                 this._socket.removeListener("connect", connectHandler);
-                reject(error);
+                this._socket.removeListener("error", errorHandler)
+                this._socket.removeListener("close", errorHandlerClose)
+                reject(new Error (error.message));
+            }
+
+            const errorHandlerClose = (has_error) => {
+                this._socket.removeListener("connect", connectHandler);
+                this._socket.removeListener("error", errorHandler)
+                this._socket.removeListener("close", errorHandlerClose)
+                reject(new Error ("Connection closed."));
             }
 
             const connectHandler = () => {
                 this.log('Connected successfully.');
                 this._socketConnected = true;
                 this._socket.removeListener("error", errorHandler)
+                this._socket.removeListener("close", errorHandlerClose)
                 resolve();
               }
 
             if (this._socketConnected == false){
             // if (this._socket.readyState == 'closed'){
                 this._socket.once("error", errorHandler);
+                this._socket.once("close", errorHandlerClose);
                 this._socket.connect(this._modbusOptions,connectHandler);
             }
             else{
@@ -167,7 +180,7 @@ module.exports = class ModbusDevice extends Homey.Device {
     * @param {string[]} event.changedKeys An array of keys changed since the previous version
     * @returns {Promise<string|void>} return a custom message that will be displayed
     */
-    async onSettings({ newSettings, changedKeys }) {
+    async onSettings({ oldSettings, newSettings, changedKeys }) {
         if (newSettings && (newSettings.ip || newSettings.port)) {
             try {
                 this.log("IP address or port changed. Reconnecting...");
@@ -196,6 +209,23 @@ module.exports = class ModbusDevice extends Homey.Device {
 
             } catch (error) {
                 this.log('Error reconnecting: ', error.message);
+                this.log('Reconnecting with old settings...');
+                this._modbusOptions.host = oldSettings.ip;
+                this._modbusOptions.port = oldSettings.port;
+                this._modbusOptions.unitId = oldSettings.id;
+                this._settings = oldSettings;
+                // Disconnect
+                try{
+                    await this.disconnectDevice();
+                }
+                catch(error){
+                    this.log("Error disconnecting: ", error.message);
+                }
+                // Connect if device was not connected before to init connection
+                if (oldSettings.connection === 'keep') {
+                    await this.connectDevice();
+                    this.log('Reconnected successfully.');
+                }
                 throw error;
             }
         }

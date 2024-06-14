@@ -100,5 +100,8 @@
   },
   "0.9.2": {
     "en": "Fixed reading boolean values (discrete/coil register)."
+  },
+  "0.9.3": {
+    "en": "Added delay for auto reconnect. Added error handling for wromg IP in settings."
   }
 }
