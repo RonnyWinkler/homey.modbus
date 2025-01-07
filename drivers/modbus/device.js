@@ -88,23 +88,27 @@ module.exports = class ModbusDevice extends Homey.Device {
 
             const errorHandler = (error) => {
                 this._socket.removeListener("connect", connectHandler);
-                this._socket.removeListener("error", errorHandler)
-                this._socket.removeListener("close", errorHandlerClose)
+                this._socket.removeListener("error", errorHandler);
+                this._socket.removeListener("close", errorHandlerClose);
+                if (error.code && error.code === 'EISCONN') {
+                    this.log("Already connected.");
+                    resolve();
+                }
                 reject(new Error (error.message));
             }
 
             const errorHandlerClose = (has_error) => {
                 this._socket.removeListener("connect", connectHandler);
-                this._socket.removeListener("error", errorHandler)
-                this._socket.removeListener("close", errorHandlerClose)
+                this._socket.removeListener("error", errorHandler);
+                this._socket.removeListener("close", errorHandlerClose);
                 reject(new Error ("Connection closed."));
             }
 
             const connectHandler = () => {
                 this.log('Connected successfully.');
                 this._socketConnected = true;
-                this._socket.removeListener("error", errorHandler)
-                this._socket.removeListener("close", errorHandlerClose)
+                this._socket.removeListener("error", errorHandler);
+                this._socket.removeListener("close", errorHandlerClose);
                 resolve();
               }
 

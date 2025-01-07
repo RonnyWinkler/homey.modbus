@@ -15,7 +15,7 @@ module.exports = class ModbusApp extends Homey.App {
           require('inspector').waitForDebugger();
         }
         catch (error) {
-          require('inspector').open(9229, '0.0.0.0', true);
+          require('inspector').open(9292, '0.0.0.0', true);
         }
       }
     }

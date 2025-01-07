@@ -103,5 +103,8 @@
   },
   "0.9.3": {
     "en": "Added delay for auto reconnect. Added error handling for wromg IP in settings."
+  },
+  "0.9.4": {
+    "en": "Fix for connect error in settings view."
   }
 }

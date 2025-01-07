@@ -4,14 +4,25 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    {
-        "type": "node",
-        "request": "attach",
-        "restart": true,
-        "name": "Attach Modbus to Homey Dev",
-        "address": "192.168.1.13",
-        "port": 9229,
-        "localRoot": "${workspaceFolder}",
-        "remoteRoot": "/"
-    } ]
+        {
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "name": "Attach Modbus Homey Pro 23 DEV",
+            "address": "192.168.1.16",
+            "port": 9292,
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/app/"
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "restart": true,
+            "name": "Attach Modbus to Homey Pro 19 Dev",
+            "address": "192.168.1.13",
+            "port": 9292,
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/"
+        } 
+    ]
 }
