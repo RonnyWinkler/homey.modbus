@@ -106,5 +106,11 @@
   },
   "0.9.4": {
     "en": "Fix for connect error in settings view."
+  },
+  "0.10.0": {
+    "en": "Added flow card to read/write a holding register bitwise."
+  },
+  "0.10.1": {
+    "en": "Added flow card to read/write a holding register bitwise."
   }
 }

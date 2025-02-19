@@ -8,9 +8,9 @@
             "type": "node",
             "request": "attach",
             "restart": true,
-            "name": "Attach Modbus Homey Pro 23 DEV",
+            "name": "Attach Modbus Homey Pro 23 DEV LAN",
             "address": "192.168.1.16",
-            "port": 9292,
+            "port": 9903,
             "localRoot": "${workspaceFolder}",
             "remoteRoot": "/app/"
         },
@@ -18,9 +18,9 @@
             "type": "node",
             "request": "attach",
             "restart": true,
-            "name": "Attach Modbus to Homey Pro 19 Dev",
+            "name": "Attach Modbus to Homey Pro 19 DEN LAN",
             "address": "192.168.1.13",
-            "port": 9292,
+            "port": 9903,
             "localRoot": "${workspaceFolder}",
             "remoteRoot": "/"
         } 

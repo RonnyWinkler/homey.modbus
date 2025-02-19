@@ -15,7 +15,7 @@ module.exports = class ModbusApp extends Homey.App {
           require('inspector').waitForDebugger();
         }
         catch (error) {
-          require('inspector').open(9292, '0.0.0.0', true);
+          require('inspector').open(9903, '0.0.0.0', true);
         }
       }
     }
@@ -45,6 +45,18 @@ module.exports = class ModbusApp extends Homey.App {
         return {
           "value": valueString,
           "value_numeric": valueNumeric
+        }
+    });
+
+    this.homey.flow.getActionCard('read_register_bit')
+    .registerRunListener(async (args, state) => {
+        let register =  args.register;
+        if (args.addressing == "1"){
+          register = args.register - 1;
+        }  
+        let {valueBoolean} = await args.device.flowActionReadAddressBit( register, args.bit);
+        return {
+          "value": valueBoolean
         }
     });
 
@@ -92,6 +104,19 @@ module.exports = class ModbusApp extends Homey.App {
         register = args.register - 1;
       }  
       let bytes = await args.device.flowActionWriteAddress( register, args.value, args.type, args.mode);
+      let tokens = {
+        bytes: bytes
+      }
+      return tokens;
+    });
+
+    this.homey.flow.getActionCard('write_register_bit')
+    .registerRunListener(async (args, state) => {
+      let register =  args.register;
+      if (args.addressing == "1"){
+        register = args.register - 1;
+      }  
+      let bytes = await args.device.flowActionWriteAddressBit( register, args.bit, args.value, args.mode);
       let tokens = {
         bytes: bytes
       }

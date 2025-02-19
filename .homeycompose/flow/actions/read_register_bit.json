@@ -1,0 +1,82 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Read Bit from Holding Register",
+        "de": "Lese Bit aus Holding Register"
+    },
+    "titleFormatted": {
+        "en": "Read Bit # [[bit]] from Holding Register [[register]] with addressing [[addressing]]",
+        "de": "Lese Bit # [[bit]] aus Holding Register [[register]] mit Adressierung [[addressing]]"
+    },
+    "hint": {
+        "en": "Reads a Bit from a Modbus register. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
+        "de": "Liest ein Bit aus einem Modbus Register. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=modbus|modbus_slave"
+        },
+        {
+            "type": "number",
+            "name": "bit",
+            "title": { 
+                "en": "Bit number",
+                "de": "Bit-Nummer"
+            },
+            "hint":{ 
+                "en": "The bit number to read from the register. Count from the lowest bit starting with 1.",
+                "de": "Die Bit-Nummer, die aus dem Register gelesen werden soll. Zählen vom niedrigsten Bit beginnend mit 1."
+            }
+          },
+          {
+          "type": "number",
+          "name": "register",
+          "title": { 
+              "en": "Register",
+              "de": "Register"
+          }
+        },
+        {
+            "type": "dropdown",
+            "name": "addressing",
+            "required": false,
+            "title": { 
+                "en": "Addressing",
+                "de": "Adressierung"
+            },
+            "hint":{
+                "en": "If not specified, the register value is taken without modification (addressing #0)",
+                "de": "Wenn nicht angegeben, wird der Register-Wert ohne Änderung übernommen (Adressierung #0)"
+            },
+            "value": "0",
+            "values":[
+                {
+                    "id": "0",
+                    "title": {
+                        "en": "Address, starting with #0",
+                        "de": "Adresse, beginnend mit #0"
+                    }
+                },
+                {
+                    "id": "1",
+                    "title": {
+                        "en": "Register, starting with #1",
+                        "de": "Register, beginnend mit #1"
+                    }
+                }
+            ]
+        }
+    ],
+    "tokens":[
+        {
+            "name": "value",
+            "type": "boolean",
+            "title": { 
+                "en": "Boolean value",
+                "de": "Boolescher Wert"
+            }
+        }
+    ]
+}

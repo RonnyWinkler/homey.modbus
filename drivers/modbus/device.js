@@ -616,6 +616,16 @@ module.exports = class ModbusDevice extends Homey.Device {
     async flowActionReadAddress(address, size, type){
         return await this.readAddress(this._client, address, size, type, REGISTER_HOLDING);
     }
+    
+    async flowActionReadAddressBit(address, bit){
+        let {valueNumeric} = await this.readAddress(this._client, address, 1, 'INT16', REGISTER_HOLDING);
+        // let bitArray = valueNumeric.toString(2);
+        // this.log("Bit array: ", bitArray);
+        // let valueBoolean = (bitArray[bitArray.length - bit] === '1');
+        let bitInt = Math.pow(2, bit-1);
+        let valueBoolean = (valueNumeric & bitInt) == bitInt;
+        return { valueBoolean };
+    }
 
     async flowActionReadAddressInput(address, size, type){
         return await this.readAddress(this._client, address, size, type, REGISTER_INPUT);
@@ -631,6 +641,20 @@ module.exports = class ModbusDevice extends Homey.Device {
 
     async flowActionWriteAddress(address, value, type, mode){
         return await this.writeAddress(this._client, address, value, type, mode);
+    }
+
+    async flowActionWriteAddressBit(address, bit, value, mode){
+        let {valueNumeric} = await this.readAddress(this._client, address, 1, 'INT16', REGISTER_HOLDING);
+        let bitInt = Math.pow(2, bit-1);
+        let valueInt = valueNumeric;
+        if (value){
+            valueInt = ( valueNumeric | bitInt );    
+        }
+        else{
+            bitInt = ~bitInt;
+            valueInt = ( valueNumeric & bitInt );    
+        }
+        return await this.writeAddress(this._client, address, valueInt, 'INT16', mode);
     }
 
     async flowActionWriteAddressCoil(address, value, mode){

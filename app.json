@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "org.modbus",
-  "version": "0.9.3",
+  "version": "0.10.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "name": {
@@ -283,6 +283,89 @@
           }
         ],
         "id": "read_register"
+      },
+      {
+        "highlight": true,
+        "title": {
+          "en": "Read Bit from Holding Register",
+          "de": "Lese Bit aus Holding Register"
+        },
+        "titleFormatted": {
+          "en": "Read Bit # [[bit]] from Holding Register [[register]] with addressing [[addressing]]",
+          "de": "Lese Bit # [[bit]] aus Holding Register [[register]] mit Adressierung [[addressing]]"
+        },
+        "hint": {
+          "en": "Reads a Bit from a Modbus register. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
+          "de": "Liest ein Bit aus einem Modbus Register. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=modbus|modbus_slave"
+          },
+          {
+            "type": "number",
+            "name": "bit",
+            "title": {
+              "en": "Bit number",
+              "de": "Bit-Nummer"
+            },
+            "hint": {
+              "en": "The bit number to read from the register. Count from the lowest bit starting with 1.",
+              "de": "Die Bit-Nummer, die aus dem Register gelesen werden soll. Zählen vom niedrigsten Bit beginnend mit 1."
+            }
+          },
+          {
+            "type": "number",
+            "name": "register",
+            "title": {
+              "en": "Register",
+              "de": "Register"
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "addressing",
+            "required": false,
+            "title": {
+              "en": "Addressing",
+              "de": "Adressierung"
+            },
+            "hint": {
+              "en": "If not specified, the register value is taken without modification (addressing #0)",
+              "de": "Wenn nicht angegeben, wird der Register-Wert ohne Änderung übernommen (Adressierung #0)"
+            },
+            "value": "0",
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "Address, starting with #0",
+                  "de": "Adresse, beginnend mit #0"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "Register, starting with #1",
+                  "de": "Register, beginnend mit #1"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "value",
+            "type": "boolean",
+            "title": {
+              "en": "Boolean value",
+              "de": "Boolescher Wert"
+            }
+          }
+        ],
+        "id": "read_register_bit"
       },
       {
         "highlight": true,
@@ -803,6 +886,127 @@
           }
         ],
         "id": "write_register"
+      },
+      {
+        "highlight": true,
+        "title": {
+          "en": "Write Bit of Holding Register",
+          "de": "Schreibe Bit enes Holding Register"
+        },
+        "titleFormatted": {
+          "en": "Write Bit # [[bit]] of Holding Register [[register]] with value [[value]] with addressing [[addressing]] in [[mode]]",
+          "de": "Schreibe Bit # [[bit]] des Holding Register [[register]] mit Wert [[value]] mit Adressierung [[addressing]] in [[mode]]"
+        },
+        "hint": {
+          "en": "Reads Bit of a Modbus register. Depending on the manufacturer documentation, register values (starting with #1) or address values (starting with #0) can be used. Choose the appropriate addressing.",
+          "de": "Liest ein Bit eines Modbus Registers. Abhängig von der Herstellerdokumentation können Registerwerte (beginnend mit #1) oder Adresswerte verwendet werden (beginnend mit #0). Wähle die entsprechende Adressierung."
+        },
+        "args": [
+          {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=modbus|modbus_slave"
+          },
+          {
+            "type": "number",
+            "name": "bit",
+            "title": {
+              "en": "Bit",
+              "de": "Bit"
+            },
+            "hint": {
+              "en": "The bit number to read from the register. Count from the lowest bit starting with 1.",
+              "de": "Die Bit-Nummer, die aus dem Register gelesen werden soll. Zählen vom niedrigsten Bit beginnend mit 1."
+            }
+          },
+          {
+            "type": "text",
+            "name": "register",
+            "title": {
+              "en": "Register",
+              "de": "Register"
+            }
+          },
+          {
+            "type": "checkbox",
+            "name": "value",
+            "title": {
+              "en": "Value",
+              "de": "Wert"
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "addressing",
+            "required": false,
+            "title": {
+              "en": "Addressing",
+              "de": "Adressierung"
+            },
+            "hint": {
+              "en": "If not specified, the register value is taken without modification (addressing #0)",
+              "de": "Wenn nicht angegeben, wird der Register-Wert ohne Änderung übernommen (Adressierung #0)"
+            },
+            "value": "0",
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "Address, starting with #0",
+                  "de": "Adresse, beginnend mit #0"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "Register, starting with #1",
+                  "de": "Register, beginnend mit #1"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "required": false,
+            "title": {
+              "en": "Mode",
+              "de": "Modus"
+            },
+            "hint": {
+              "en": "If not specified, the live mode is used. Use the test mode to check the resulting byte sequence.",
+              "de": "Wenn nicht angegeben, wird der Echt-Modus verwendet. Verwende den Testmodus, um die resultierende Byte-Sequenz zu überprüfen."
+            },
+            "value": "live",
+            "values": [
+              {
+                "id": "live",
+                "title": {
+                  "en": "Live mode",
+                  "de": "Echt-Modus"
+                }
+              },
+              {
+                "id": "test",
+                "title": {
+                  "en": "Test mode",
+                  "de": "Test-Modus"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "bytes",
+            "type": "string",
+            "title": {
+              "en": "Bytes written",
+              "de": "Bytes geschrieben"
+            }
+          }
+        ],
+        "id": "write_register_bit"
       },
       {
         "highlight": true,
