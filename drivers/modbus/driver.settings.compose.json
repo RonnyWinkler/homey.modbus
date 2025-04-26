@@ -57,5 +57,28 @@
                 }
             }
         ]
+    },
+    {
+      "type": "group",
+      "label": { 
+          "en": "Modbus options",
+          "de": "Modbus-Optionen"
+      },
+      "children": 
+      [
+        {
+          "id": "force_write_multi_registers",
+          "type": "checkbox",
+          "value": false,
+          "label": {
+              "en": "Use 'write multiple registers' function for single rerister (16bit)",
+              "de": "Verwende 'write multiple registers' Funktion für einzelne Register (16bit)"
+          },
+          "hint": {
+              "en": "This option will treat single registers (16bit) as 'write multiple registers'. This can be used if the Modbus device only supports write access to multiple registers.",
+              "de": "Mit dieser Option werden Einzelregister (16bit) als 'write multiple registers' behandelt. Dies kann verwendet werden, wenn das Modbus-Gerät nur Schreibzugriffe auf mehrere Register unterstützt."
+          }
+        }
+      ]
     }
 ]

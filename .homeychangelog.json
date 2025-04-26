@@ -112,5 +112,8 @@
   },
   "0.10.1": {
     "en": "Added flow card to read/write a holding register bitwise."
+  },
+  "0.11.0": {
+    "en": "Added app setting to force 'write multiple registers' for single register update."
   }
 }

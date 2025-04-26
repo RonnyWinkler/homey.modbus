@@ -570,7 +570,7 @@ module.exports = class ModbusDevice extends Homey.Device {
                     await client.writeSingleCoil( address, value);
                 }
                 else{
-                    if ( buffer.byteLength > 2){
+                    if ( buffer.byteLength > 2 || this.getSetting('force_write_multi_registers') === true ){
                         await client.writeMultipleRegisters( address, buffer);
                     }
                     else{
