@@ -115,5 +115,8 @@
   },
   "0.11.0": {
     "en": "Added app setting to force 'write multiple registers' for single register update."
+  },
+  "0.12.0": {
+    "en": "Added device setting to prevent register writing if unchanged."
   }
 }

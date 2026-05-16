@@ -78,6 +78,19 @@
               "en": "This option will treat single registers (16bit) as 'write multiple registers'. This can be used if the Modbus device only supports write access to multiple registers.",
               "de": "Mit dieser Option werden Einzelregister (16bit) als 'write multiple registers' behandelt. Dies kann verwendet werden, wenn das Modbus-Gerät nur Schreibzugriffe auf mehrere Register unterstützt."
           }
+        },
+        {
+          "id": "prevent_write_unchanged_data",
+          "type": "checkbox",
+          "value": false,
+          "label": {
+              "en": "Prevent writing unchanged data",
+              "de": "Vermeide das Schreiben unveränderter Daten."
+          },
+          "hint": {
+              "en": "This option will read a register before writing, to only write changed data over Modbus",
+              "de": "Mit dieser Option wird ein Register vor dem Schreiben gelesen, um nur veränderte Daten über Modbus zu schreiben"
+          }
         }
       ]
     }

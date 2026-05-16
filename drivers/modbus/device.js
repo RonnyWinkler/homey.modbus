@@ -565,19 +565,45 @@ module.exports = class ModbusDevice extends Homey.Device {
 
             this.log("Write register: Bytes: " + bytes);
             if (mode === 'live'){
-                this.log("Write register: Live mode");
-                if (type === 'BOOL'){
-                    await client.writeSingleCoil( address, value);
-                }
-                else{
-                    if ( buffer.byteLength > 2 || this.getSetting('force_write_multi_registers') === true ){
-                        await client.writeMultipleRegisters( address, buffer);
+
+                // Check old value if data has changed
+                let writeData = true;
+                if (this._settings.prevent_write_unchanged_data === true){
+                    this.log("Compare current value with new value; old: ");
+                    let oldValue; 
+                    if (type === 'BOOL'){
+                        oldValue = await this.readAddress(this._client, address, 1, 'BOOL', REGISTER_COIL);
+                        if (oldValue.valueBoolean === value){
+                            writeData = false;
+                        }
                     }
                     else{
-                        await client.writeSingleRegister( address, buffer.readUInt16BE());
-                    }
+                        oldValue = await this.readAddress(this._client, address, buffer.byteLength/2, type, REGISTER_HOLDING);
+                        if (oldValue.valueNumeric === value){
+                            writeData = false;
+                        }
+                    }                    
                 }
-                this.log("Write register: Succcess");
+
+                if (writeData === true){
+                    // Write register
+                    this.log("Write register: Live mode");
+                    if (type === 'BOOL'){
+                        await client.writeSingleCoil( address, value);
+                    }
+                    else{
+                        if ( buffer.byteLength > 2 || this.getSetting('force_write_multi_registers') === true ){
+                            await client.writeMultipleRegisters( address, buffer);
+                        }
+                        else{
+                            await client.writeSingleRegister( address, buffer.readUInt16BE());
+                        }
+                    }
+                    this.log("Write register: Succcess");
+                }
+                else{
+                    this.log("Write register: Data has not changed. Do not write.");
+                }
             }
             else{
                 this.log("Write register: Simulation mode");
